@@ -16,12 +16,11 @@ public class UserController {
     @Autowired
     UserRepository UserRepository;
 
-    // See All Books on Homepage
-    @RequestMapping({"/", "/list"})
-    public String viewHomePage(Model model){
-        List<User> listUsers = UserRepository.findAll();
-        model.addAttribute("listUsers", listUsers);
+    @RequestMapping("/list")
+    public String viewHomePage(Model model) {
+        // List<User> listBooks = UserRepository.findAll();
+        // model.addAttribute("listBooks", listBooks);
         
-        return "welcome";
+        return "hello";
     }
 }
