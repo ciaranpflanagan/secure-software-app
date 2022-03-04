@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping(path = "/users")
 public class UserController {
 
     @Autowired
@@ -18,9 +19,16 @@ public class UserController {
 
     @RequestMapping("/list")
     public String viewHomePage(Model model) {
-        // List<User> listBooks = UserRepository.findAll();
-        // model.addAttribute("listBooks", listBooks);
+        List<User> listBooks = UserRepository.findAll();
+        model.addAttribute("listBooks", listBooks);
         
         return "hello";
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user, Model model) {
+        UserRepository.save(user);
+
+        return viewHomePage(model);
     }
 }
