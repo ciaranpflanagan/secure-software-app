@@ -25,12 +25,14 @@ public class User {
     private String email;
     @NotBlank
     private String nationality;
+    @NotBlank
+    private String password;
 
     public User(){
         super();
     }
 
-    public User(Long id, String first_name, String last_name, String dob, String pps, String address, String phone_number, String email, String nationality) {
+    public User(Long id, String first_name, String last_name, String dob, String pps, String address, String phone_number, String email, String nationality, String password) {
         super();
         this.id = id;
         this.first_name = first_name;
@@ -41,6 +43,7 @@ public class User {
         this.phone_number = phone_number;
         this.email = email;
         this.nationality = nationality;
+        this.password = password; // This will need to be hashed
     }
 
     /**
@@ -108,5 +111,8 @@ public class User {
     }
     public void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
