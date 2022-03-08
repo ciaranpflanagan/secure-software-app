@@ -9,8 +9,10 @@ public class VaccinationAppointment {
     @Id
     @GeneratedValue
     private Long id;
-    @NotBlank
-    private Long userId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
     @NotBlank
     private String timeSlot;
     @NotBlank
@@ -19,33 +21,37 @@ public class VaccinationAppointment {
     private String vaccinationCentre;
     @NotBlank
     private String brandType;
-    
 
     public VaccinationAppointment() {
         super();
     }
 
-    public VaccinationAppointment(Long userID){
-        super();
-        this.userId = userID;
-    }
-
-    public VaccinationAppointment(Long id, Long userId, String timeSlot, Integer doseNumber, String vaccinationCentre, String brandType) {
+    public VaccinationAppointment(Long id, User user, String timeSlot, Integer doseNumber, String vaccinationCentre,
+            String brandType) {
         super();
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.timeSlot = timeSlot;
         this.doseNumber = doseNumber;
         this.vaccinationCentre = vaccinationCentre;
         this.brandType = brandType;
     }
 
-
-
-    public Long getUserId() {
-        return this.userId;
+    public Long getId() {
+        return this.id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getTimeSlot() {
         return this.timeSlot;

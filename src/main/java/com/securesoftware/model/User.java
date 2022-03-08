@@ -27,6 +27,8 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
+    @OneToOne(mappedBy = "user")
+    private VaccinationAppointment vaccinationAppointment;
 
     public User(){
         super();
