@@ -22,6 +22,9 @@ public class VaccinationAppointment {
     @NotBlank
     private String brandType;
 
+    @OneToOne(mappedBy = "vaccinationAppointment")
+    private Activity activity;
+
     public VaccinationAppointment() {
         super();
     }

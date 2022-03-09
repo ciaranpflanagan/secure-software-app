@@ -29,6 +29,8 @@ public class User {
     private String password;
     @OneToOne(mappedBy = "user")
     private VaccinationAppointment vaccinationAppointment;
+    @OneToOne(mappedBy = "user")
+    private Activity activity;
 
     public User(){
         super();
