@@ -1,7 +1,5 @@
 package com.securesoftware.controller;
 
-import com.securesoftware.exception.UserNotFoundException;
-import com.securesoftware.model.Role;
 import com.securesoftware.model.User;
 import com.securesoftware.repository.RoleRepository;
 import com.securesoftware.repository.UserRepository;
@@ -48,14 +46,10 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@RequestParam Map<String,String> allParams) {
-        // System.out.println(user.getAddress());
-        
-        System.out.println("Parameters are " + allParams.entrySet());
-
         User userExists = userService().findUserByEmail(allParams.get("email"));
         if (userExists != null) {
             System.out.println("User already exists");
-            // Error
+            // Error - need to handle this
         } else {
             // Create user
             User user = new User();
