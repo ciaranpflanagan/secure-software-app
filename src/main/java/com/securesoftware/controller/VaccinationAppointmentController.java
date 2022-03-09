@@ -24,12 +24,12 @@ public class VaccinationAppointmentController {
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
-    /*
-     * @RequestMapping("/selectAppointment")
-     * public String appointmentSelection(Model model){
-     * VaccinationAppointment vAppointment = new VaccinationAppointment();
-     * }
-     */
+    @GetMapping("/select-appointment")
+    public String register() {
+
+        availableSlots = setSlots();
+        return "vaccinationAppointments/VaccineSelection";
+    }
 
     public static ArrayList<VaccinationSlot> setSlots() {
         ArrayList<VaccinationSlot> allSlots = new ArrayList<VaccinationSlot>();
