@@ -1,10 +1,11 @@
 package com.securesoftware.repository;
 
-import com.securesoftware.model.User;
+import com.securesoftware.model.Role;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-        User findByEmail(String email);
+public interface RoleRepository extends JpaRepository<Role, Integer> {
+    Role findByRole(String role);
 }
