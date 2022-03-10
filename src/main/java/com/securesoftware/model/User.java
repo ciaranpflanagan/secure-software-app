@@ -29,8 +29,12 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
+<<<<<<< HEAD
     @OneToOne(mappedBy = "user")
     private VaccinationAppointment vaccinationAppointment;
+=======
+    
+>>>>>>> 145414d8b1668fd8bd2722fc237789dd6b7b6720
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
