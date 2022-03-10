@@ -48,7 +48,7 @@ public class ActivityController {
         // Getting the last activity of the user
         Activity latestActivity = activitiesList.get(activitiesList.size() - 1);
 
-        model.addAttribute("userId", latestActivity.getId());
+        model.addAttribute("activity", latestActivity);
         model.addAttribute("latestActivity", latestActivity.getActivityType());
 
 
