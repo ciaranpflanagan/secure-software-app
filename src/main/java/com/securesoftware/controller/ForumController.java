@@ -3,6 +3,7 @@ package com.securesoftware.controller;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.securesoftware.model.ForumPost;
 import com.securesoftware.model.User;
@@ -36,7 +37,7 @@ public class ForumController {
     public String showForum(Model model) {
         List<ForumPost> posts = forumRepository.findAll();
         model.addAttribute("posts", posts);
-        
+
         return "forum/posts";
     }
 
@@ -44,9 +45,11 @@ public class ForumController {
      * Displays the page used to reply to a forum post
      */
     @GetMapping("/reply/{id}")
-    public String showReplyPage(@PathVariable(value = "id") Long postId, @RequestParam Map<String,String> allParams) {
+    public String showReplyPage(Model model, @PathVariable(value = "id") Long postId, @RequestParam Map<String,String> allParams) {
         // Get single forum post and return it to view
-        
+        ForumPost post = forumRepository.findById(postId).get();
+        model.addAttribute("post", post);
+
         return "forum/reply";
     }
 
@@ -73,6 +76,31 @@ public class ForumController {
         // Saving forum post
         ForumPost post = new ForumPost();
         post.setUserId(user.getId());
+        post.setTitle(allParams.get("title"));
+        post.setBody(allParams.get("body"));
+        post.setPostedAt(new Date());
+        
+        forumRepository.save(post);
+
+        return "forum/posts"; // Return to forum page
+    }
+
+    /**
+     * Saves the forum posts
+     * @param allParams
+     * @return
+     */
+    @PostMapping("/save-reply")
+    public String saveForumPostReply(@RequestParam Map<String,String> allParams) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+
+        User user = UserRepository.findByEmail(email);
+
+        // Saving forum post
+        ForumPost post = new ForumPost();
+        post.setUserId(user.getId());
+        post.setParentId(Long.parseLong(allParams.get("post"))); // Id of the parent post
         post.setTitle(allParams.get("title"));
         post.setBody(allParams.get("body"));
         post.setPostedAt(new Date());
