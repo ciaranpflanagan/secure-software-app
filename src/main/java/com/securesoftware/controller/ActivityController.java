@@ -45,11 +45,10 @@ public class ActivityController {
         User user = userRepository.findByEmail(email);
         Set<Activity> activitiesOfUser = user.getActivities();
         List<Activity> activitiesList = new ArrayList<>(activitiesOfUser);
+        
         // Getting the last activity of the user
         Activity latestActivity = activitiesList.get(activitiesList.size() - 1);
-
         model.addAttribute("activity", latestActivity);
-        model.addAttribute("latestActivity", latestActivity.getActivityType());
 
 
         return "activities/recent_activity";
