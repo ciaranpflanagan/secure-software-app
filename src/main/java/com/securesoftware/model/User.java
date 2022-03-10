@@ -1,5 +1,7 @@
 package com.securesoftware.model;
 
+import java.util.Set;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
@@ -27,14 +29,28 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
-    @OneToOne(mappedBy = "user")
-    private VaccinationAppointment vaccinationAppointment;
+    
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
-    public User(){
+    public User() {
         super();
     }
 
-    public User(Long id, String first_name, String last_name, String dob, String pps, String address, String phone_number, String email, String nationality, String password) {
+    public User(
+        Long id,
+        String first_name,
+        String last_name,
+        String dob,
+        String pps,
+        String address,
+        String phone_number,
+        String email,
+        String nationality,
+        String password,
+        Set<Role> roles
+    ) {
         super();
         this.id = id;
         this.first_name = first_name;
@@ -46,6 +62,7 @@ public class User {
         this.email = email;
         this.nationality = nationality;
         this.password = password; // This will need to be hashed
+        this.roles = roles;
     }
 
     /**
@@ -79,6 +96,12 @@ public class User {
     }
     public String getNationality() {
         return nationality;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public Set<Role> getRole() {
+        return roles;
     }
 
 
@@ -116,5 +139,8 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setRole(Set<Role> roles) {
+        this.roles = roles;
     }
 }
