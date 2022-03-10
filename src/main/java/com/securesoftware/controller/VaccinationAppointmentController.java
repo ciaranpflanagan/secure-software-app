@@ -93,25 +93,6 @@ public class VaccinationAppointmentController {
         // Prepopulating available slots
 
 
-        /**
-         *
-         *
-         * I've commented all this below, it seems to be a duplication of above?
-         * I'm not sure what's going on here
-         *
-         */
-        // allSlots = setSlots();
-
-        // // Below removes slots which are already taken
-        // ArrayList<VaccinationSlot> takenSlots = new ArrayList<>();
-
-        // List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
-
-        // for(VaccinationAppointment existingAppointment : existingAppointments){
-        //     takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
-        // }
-
-        // allSlots.removeAll(takenSlots);
 
         return "vaccinationAppointments/VaccineSelection";
     }
