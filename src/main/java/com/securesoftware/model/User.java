@@ -112,7 +112,12 @@ public class User {
     public Set<Role> getRole() {
         return roles;
     }
-
+    public Set<VaccinationAppointment> getVaccinationAppointments() {
+        return this.vaccinationAppointments;
+    }
+    public Set<Activity> getActivities() {
+        return this.activities;
+    }
 
     /**
      *********************
@@ -152,20 +157,9 @@ public class User {
     public void setRole(Set<Role> roles) {
         this.roles = roles;
     }
-
-
-    public Set<VaccinationAppointment> getVaccinationAppointments() {
-        return this.vaccinationAppointments;
-    }
-
     public void setVaccinationAppointments(Set<VaccinationAppointment> vaccinationAppointments) {
         this.vaccinationAppointments = vaccinationAppointments;
     }
-
-    public Set<Activity> getActivities() {
-        return this.activities;
-    }
-
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }

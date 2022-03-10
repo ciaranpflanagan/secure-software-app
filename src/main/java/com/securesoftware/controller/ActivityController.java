@@ -50,7 +50,6 @@ public class ActivityController {
         Activity latestActivity = activitiesList.get(activitiesList.size() - 1);
         model.addAttribute("activity", latestActivity);
 
-
         return "activities/recent_activity";
     }
 

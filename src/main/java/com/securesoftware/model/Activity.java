@@ -34,39 +34,39 @@ public class Activity {
         this.date = date;
     }
 
-
+    /**
+     *********************
+     *      Getters
+     *********************
+     */
     public Long getId() {
         return this.id;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public User getUser() {
         return this.user;
     }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getActivityType() {
         return this.activityType;
     }
-
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
-    }
-
-
     public String getDate() {
         return this.date;
     }
 
+    /**
+     *********************
+     *      Setters
+     *********************
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
+    }
     public void setDate(String date) {
         this.date = date;
     }
-
-
 }
