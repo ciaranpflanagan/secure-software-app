@@ -87,7 +87,7 @@ public class VaccinationAppointmentController {
         }
 
         // if user has 0 appointments or vaccines they can choose a slot from below
-        model.addAttribute("openSlots", availableSlots)
+        model.addAttribute("openSlots", availableSlots);
         //Should lead  the user to the page to choose relevant slots
         return "vaccinationAppointments/VaccineSelection";
     }
