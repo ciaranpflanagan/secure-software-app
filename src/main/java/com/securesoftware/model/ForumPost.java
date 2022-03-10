@@ -13,6 +13,9 @@ public class ForumPost {
     private Long id;
     @NotBlank
     private Long user_id;
+    
+    private Long parent_id; // Parent post id
+
     @NotBlank
     private String title;
     @NotBlank
@@ -24,10 +27,11 @@ public class ForumPost {
         super();
     }
 
-    public ForumPost(Long id, Long user_id, String title, String body, Date posted_at) {
+    public ForumPost(Long id, Long user_id, Long parent_id, String title, String body, Date posted_at) {
         super();
         this.id = id;
         this.user_id = user_id;
+        this.parent_id = parent_id;
         this.title = title;
         this.body = body;
         this.posted_at = posted_at;
@@ -43,6 +47,9 @@ public class ForumPost {
     }
     public Long getUserId() {
         return user_id;
+    }
+    public Long getParentId() {
+        return parent_id;
     }
     public String getTitle() {
         return title;
@@ -65,6 +72,9 @@ public class ForumPost {
     }
     public void setUserId(Long user_id) {
         this.user_id = user_id;
+    }
+    public void setParentId(Long parent_id) {
+        this.parent_id = parent_id;
     }
     public void setTitle(String title) {
         this.title = title;
