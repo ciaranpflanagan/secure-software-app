@@ -23,6 +23,19 @@ public class ForumController {
         return "forum/posts";
     }
 
+    /**
+     * Displays the page used to reply to a forum post
+     */
+    @GetMapping("/reply")
+    public String showReplyPage() {
+        return "forum/reply";
+    }
+
+    /**
+     * Saves the forum posts
+     * @param allParams
+     * @return
+     */
     @PostMapping("/save")
     public String saveForumPost(@RequestParam Map<String,String> allParams) {
         // Make forum post object here and save
