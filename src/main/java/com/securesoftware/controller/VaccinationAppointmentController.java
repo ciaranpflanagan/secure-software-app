@@ -87,8 +87,9 @@ public class VaccinationAppointmentController {
         }
 
         // if user has 0 appointments or vaccines they can choose a slot from below
-        model.addAttribute("openSlots", availableSlots);
-        //Should lead  the user to the page to choose relevant slots
+        // model.addAttribute("openSlots",
+        // availableSlots);??????????????????????????????
+        // Should lead the user to the page to choose relevant slots
         return "vaccinationAppointments/VaccineSelection";
     }
 
@@ -202,11 +203,12 @@ public class VaccinationAppointmentController {
 
     // To do: A method for assigning a user a secondary time slot
     /*
-    *
-    *
-    * When a user selects a slot we will assign them the same slot 21 days from then
-    *
-    *
-    *
-    */
+     *
+     *
+     * When a user selects a slot we will assign them the same slot 21 days from
+     * then
+     *
+     *
+     *
+     */
 }
