@@ -10,7 +10,7 @@ public class VaccinationAppointment {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @NotBlank
@@ -22,8 +22,6 @@ public class VaccinationAppointment {
     @NotBlank
     private String brandType;
 
-    @OneToOne(mappedBy = "vaccinationAppointment")
-    private Activity activity;
 
     public VaccinationAppointment() {
         super();

@@ -2,6 +2,7 @@ package com.securesoftware.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -27,10 +28,14 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
-    @OneToOne(mappedBy = "user")
-    private VaccinationAppointment vaccinationAppointment;
-    @OneToOne(mappedBy = "user")
-    private Activity activity;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<VaccinationAppointment> vaccinationAppointments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<Activity> activities;
 
     public User(){
         super();

@@ -10,13 +10,9 @@ public class Activity {
     @GeneratedValue
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vaccination_appointment_id", referencedColumnName = "id")
-    private VaccinationAppointment vaccinationAppointment;
 
     @NotBlank
     private String activityType;
@@ -31,7 +27,6 @@ public class Activity {
         super();
         this.id = id;
         this.user = user;
-        this.vaccinationAppointment = vaccinationAppointment;
         this.activityType = activityType;
     }
 
@@ -50,14 +45,6 @@ public class Activity {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public VaccinationAppointment getVaccinationAppointment() {
-        return this.vaccinationAppointment;
-    }
-
-    public void setVaccinationAppointment(VaccinationAppointment vaccinationAppointment) {
-        this.vaccinationAppointment = vaccinationAppointment;
     }
 
     public String getActivityType() {
