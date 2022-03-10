@@ -29,15 +29,18 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
-<<<<<<< HEAD
-    @OneToOne(mappedBy = "user")
-    private VaccinationAppointment vaccinationAppointment;
-=======
-    
->>>>>>> 145414d8b1668fd8bd2722fc237789dd6b7b6720
+
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<VaccinationAppointment> vaccinationAppointments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<Activity> activities;
 
     public User() {
         super();
@@ -108,7 +111,12 @@ public class User {
     public Set<Role> getRole() {
         return roles;
     }
-
+    public Set<VaccinationAppointment> getVaccinationAppointments() {
+        return this.vaccinationAppointments;
+    }
+    public Set<Activity> getActivities() {
+        return this.activities;
+    }
 
     /**
      *********************
@@ -148,4 +156,11 @@ public class User {
     public void setRole(Set<Role> roles) {
         this.roles = roles;
     }
+    public void setVaccinationAppointments(Set<VaccinationAppointment> vaccinationAppointments) {
+        this.vaccinationAppointments = vaccinationAppointments;
+    }
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
 }

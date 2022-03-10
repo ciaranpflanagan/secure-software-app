@@ -3,13 +3,18 @@ package com.securesoftware.controller;
 import com.securesoftware.exception.UserNotFoundException;
 import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
+import com.securesoftware.repository.UserRepository;
 import com.securesoftware.repository.VaccinationAppointmentRepository;
+
+import com.securesoftware.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +31,11 @@ public class VaccinationAppointmentController {
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/select-appointment")
-    public String register() {
+    public String register(Model model) {
 
         // Prepopulating available slots
         allSlots = setSlots();
@@ -37,11 +45,73 @@ public class VaccinationAppointmentController {
 
         List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
 
-        for(VaccinationAppointment existingAppointment : existingAppointments){
-            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
+        for (VaccinationAppointment existingAppointment : existingAppointments) {
+            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(),
+                    existingAppointment.getVaccinationCentre()));
         }
 
-        allSlots.removeAll(takenSlots);
+        // All available slots
+        availableSlots = allSlots;
+        availableSlots.removeAll(takenSlots);
+
+        // Checking if a user has not already registered
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+
+        // Getting active user
+        User user = userRepository.findByEmail(email);
+        boolean isRegistered = false;
+        int appointmentsMade = 0;
+        ArrayList<VaccinationAppointment> usersAppointments = new ArrayList<>();
+
+        for (VaccinationAppointment existingAppointment : existingAppointments) {
+            if (existingAppointment.getUser().getId() == user.getId()) {
+                isRegistered = true;
+                usersAppointments.add(existingAppointment);
+                appointmentsMade++;
+            }
+        }
+
+        // checking if the user requires a second dose
+        if (isRegistered) {
+            // return date of most recent appointment
+            if (appointmentsMade == 1) {
+                model.addAttribute("nextAppointmentTime", usersAppointments.get(0).getTimeSlot());
+            }
+
+            else if (appointmentsMade == 2) {
+                model.addAttribute("nextAppointmentTime", usersAppointments.get(1).getTimeSlot());
+            }
+
+            return "vaccinationAppointments/AppoitmentAlreadyBooked";
+        }
+
+        // if user has 0 appointments or vaccines they can choose a slot from below
+        // model.addAttribute("openSlots",
+        // availableSlots);??????????????????????????????
+        // Should lead the user to the page to choose relevant slots
+        // Prepopulating available slots
+
+
+        /**
+         *
+         *
+         * I've commented all this below, it seems to be a duplication of above?
+         * I'm not sure what's going on here
+         *
+         */
+        // allSlots = setSlots();
+
+        // // Below removes slots which are already taken
+        // ArrayList<VaccinationSlot> takenSlots = new ArrayList<>();
+
+        // List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
+
+        // for(VaccinationAppointment existingAppointment : existingAppointments){
+        //     takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
+        // }
+
+        // allSlots.removeAll(takenSlots);
 
         return "vaccinationAppointments/VaccineSelection";
     }
@@ -154,7 +224,14 @@ public class VaccinationAppointmentController {
         return dates;
     }
 
-    // Small test to display how this is going to function
-
-
+    // To do: A method for assigning a user a secondary time slot
+    /*
+     *
+     *
+     * When a user selects a slot we will assign them the same slot 21 days from
+     * then
+     *
+     *
+     *
+     */
 }
