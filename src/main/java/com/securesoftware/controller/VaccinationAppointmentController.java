@@ -3,13 +3,18 @@ package com.securesoftware.controller;
 import com.securesoftware.exception.UserNotFoundException;
 import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
+import com.securesoftware.repository.UserRepository;
 import com.securesoftware.repository.VaccinationAppointmentRepository;
+
+import com.securesoftware.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +24,56 @@ import java.util.Map;
 @RequestMapping(path = "/vaccinationappointments")
 public class VaccinationAppointmentController {
 
+    private ArrayList<VaccinationSlot> allSlots = new ArrayList<VaccinationSlot>();
+
     private ArrayList<VaccinationSlot> availableSlots = new ArrayList<VaccinationSlot>();
 
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/select-appointment")
     public String register() {
 
-        availableSlots = setSlots();
+        // Prepopulating available slots
+        allSlots = setSlots();
+
+        // Below removes slots which are already taken
+        ArrayList<VaccinationSlot> takenSlots = new ArrayList<>();
+
+        List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
+
+        for(VaccinationAppointment existingAppointment : existingAppointments){
+            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
+        }
+
+        // All available slots
+        allSlots.removeAll(takenSlots);
+
+
+        //Checking if a user has not already registered
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+        
+        // Getting active user
+        User user = userRepository.findByEmail(email);
+        boolean isRegistered = false;
+        int appointmentsMade = 0;
+
+        for(VaccinationAppointment existingAppointment : existingAppointments){
+            if(existingAppointment.getUser().getId() == user.getId()){
+                isRegistered = true;
+                appointmentsMade++;
+            }
+        }
+
+        //checking if the user requires a second dose
+        if(isRegistered){
+            // return date of most recent appointment
+        }
+
         return "vaccinationAppointments/VaccineSelection";
     }
 
@@ -129,8 +175,8 @@ public class VaccinationAppointmentController {
     // Returns a current list of dates from today to 30 days from now
     public static String[] dateCalculator() {
         String currentDate = java.time.LocalDate.now().toString();
-        String[] dates = new String[31];
-        for (int i = 0; i < 31; i++) {
+        String[] dates = new String[30];
+        for (int i = 1; i < 31; i++) {
             dates[i] = java.time.LocalDate
                     .parse(currentDate)
                     .plusDays(i)
