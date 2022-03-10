@@ -5,10 +5,12 @@
 
                 <div class="card py-3 px-3 mb-3">
                     <div class="row align-items-center">
-                        <form action="">
-                            <label for="postBody" class="form-label">Post Body</label>
+                        <form action="#" th:action="@{/forum/save}" method="POST">
+                            <label for="title" class="form-label">Post Title</label>
+                            <input name="title" type="text" placeholder="Post Title" class="form-control"><br>
+                            <label for="body" class="form-label">Post Body</label>
                             <textarea
-                                name="postBody"
+                                name="body"
                                 cols="30"
                                 rows="10"
                                 placeholder="Ask your question here..."

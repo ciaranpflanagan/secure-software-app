@@ -1,11 +1,20 @@
 package com.securesoftware.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.securesoftware.model.ForumPost;
+import com.securesoftware.model.User;
+import com.securesoftware.repository.ForumRepository;
+import com.securesoftware.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +24,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(path = "/forum")
 public class ForumController {
+    @Autowired
+    UserRepository UserRepository;
+    @Autowired
+    ForumRepository forumRepository;
 
     /**
      * Displays the forum
      */
     @GetMapping("/posts")
-    public String showForum() {
+    public String showForum(Model model) {
+        List<ForumPost> posts = forumRepository.findAll();
+        model.addAttribute("posts", posts);
+        
         return "forum/posts";
     }
 
@@ -38,7 +54,7 @@ public class ForumController {
      * Displays the page used to post a new forum post
      */
     @GetMapping("/new")
-    public String showNewPost() {
+    public String showNewPost(@RequestParam Map<String,String> allParams) {
         return "forum/new";
     }
 
@@ -49,12 +65,19 @@ public class ForumController {
      */
     @PostMapping("/save")
     public String saveForumPost(@RequestParam Map<String,String> allParams) {
-        // Make forum post object here and save
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails)principal).getUsername();
+
+        User user = UserRepository.findByEmail(email);
+
+        // Saving forum post
         ForumPost post = new ForumPost();
-        post.setUserId(Long.parseLong(allParams.get("user_id")));
+        post.setUserId(user.getId());
         post.setTitle(allParams.get("title"));
         post.setBody(allParams.get("body"));
-        post.setPostedAt((java.sql.Date) new Date());
+        post.setPostedAt(new Date());
+        
+        forumRepository.save(post);
 
         return "forum/posts"; // Return to forum page
     }

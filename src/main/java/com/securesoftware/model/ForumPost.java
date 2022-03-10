@@ -5,13 +5,14 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.data.annotation.CreatedDate;
+
 @Entity
 @Table(name = "forum_posts")
 public class ForumPost {
     @Id
     @GeneratedValue
     private Long id;
-    @NotBlank
     private Long user_id;
     
     private Long parent_id; // Parent post id
@@ -20,7 +21,7 @@ public class ForumPost {
     private String title;
     @NotBlank
     private String body;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "posted_at", nullable = false, updatable = false)
     private Date posted_at;
 
     public ForumPost() {
