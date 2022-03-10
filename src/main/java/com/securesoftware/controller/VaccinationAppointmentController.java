@@ -51,7 +51,8 @@ public class VaccinationAppointmentController {
         }
 
         // All available slots
-        allSlots.removeAll(takenSlots);
+        availableSlots = allSlots;
+        availableSlots.removeAll(takenSlots);
 
         // Checking if a user has not already registered
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -85,6 +86,8 @@ public class VaccinationAppointmentController {
             return "vaccinationAppointments/AppoitmentAlreadyBooked";
         }
 
+        // if user has 0 appointments or vaccines they can choose a slot from below
+        model.addAttribute("openSlots", availableSlots)
         //Should lead  the user to the page to choose relevant slots
         return "vaccinationAppointments/VaccineSelection";
     }
@@ -201,7 +204,7 @@ public class VaccinationAppointmentController {
     /*
     *
     *
-    *
+    * When a user selects a slot we will assign them the same slot 21 days from then
     *
     *
     *
