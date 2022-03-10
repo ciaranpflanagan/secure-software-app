@@ -35,7 +35,7 @@ public class VaccinationAppointmentController {
     UserRepository userRepository;
 
     @GetMapping("/select-appointment")
-    public String register() {
+    public String register(Model model) {
 
         // Prepopulating available slots
         allSlots = setSlots();
@@ -45,35 +45,47 @@ public class VaccinationAppointmentController {
 
         List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
 
-        for(VaccinationAppointment existingAppointment : existingAppointments){
-            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
+        for (VaccinationAppointment existingAppointment : existingAppointments) {
+            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(),
+                    existingAppointment.getVaccinationCentre()));
         }
 
         // All available slots
         allSlots.removeAll(takenSlots);
 
-
-        //Checking if a user has not already registered
+        // Checking if a user has not already registered
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
-        
+
         // Getting active user
         User user = userRepository.findByEmail(email);
         boolean isRegistered = false;
         int appointmentsMade = 0;
+        ArrayList<VaccinationAppointment> usersAppointments = new ArrayList<>();
 
-        for(VaccinationAppointment existingAppointment : existingAppointments){
-            if(existingAppointment.getUser().getId() == user.getId()){
+        for (VaccinationAppointment existingAppointment : existingAppointments) {
+            if (existingAppointment.getUser().getId() == user.getId()) {
                 isRegistered = true;
+                usersAppointments.add(existingAppointment);
                 appointmentsMade++;
             }
         }
 
-        //checking if the user requires a second dose
-        if(isRegistered){
+        // checking if the user requires a second dose
+        if (isRegistered) {
             // return date of most recent appointment
+            if (appointmentsMade == 1) {
+                model.addAttribute("nextAppointmentTime", usersAppointments.get(0).getTimeSlot());
+            }
+
+            else if (appointmentsMade == 2) {
+                model.addAttribute("nextAppointmentTime", usersAppointments.get(1).getTimeSlot());
+            }
+
+            return "vaccinationAppointments/AppoitmentAlreadyBooked";
         }
 
+        //Should lead  the user to the page to choose relevant slots
         return "vaccinationAppointments/VaccineSelection";
     }
 
@@ -185,7 +197,13 @@ public class VaccinationAppointmentController {
         return dates;
     }
 
-    // Small test to display how this is going to function
-
-
+    // To do: A method for assigning a user a secondary time slot
+    /*
+    *
+    *
+    *
+    *
+    *
+    *
+    */
 }
