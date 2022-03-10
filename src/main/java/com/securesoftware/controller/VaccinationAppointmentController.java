@@ -1,6 +1,5 @@
 package com.securesoftware.controller;
 
-import com.securesoftware.exception.UserNotFoundException;
 import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
 import com.securesoftware.repository.UserRepository;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,7 +33,6 @@ public class VaccinationAppointmentController {
 
     @GetMapping("/select-appointment")
     public String register(Model model) {
-
         // Prepopulating available slots
         allSlots = setSlots();
 
@@ -58,7 +54,8 @@ public class VaccinationAppointmentController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
 
-        // Getting active user
+
+        // If user already has an appointment
         User user = userRepository.findByEmail(email);
         boolean isRegistered = false;
         int appointmentsMade = 0;
@@ -74,16 +71,17 @@ public class VaccinationAppointmentController {
 
         // checking if the user requires a second dose
         if (isRegistered) {
+            model.addAttribute("appointmentNeeded", false);
+
             // return date of most recent appointment
-            if (appointmentsMade == 1) {
-                model.addAttribute("nextAppointmentTime", usersAppointments.get(0).getTimeSlot());
-            }
-
-            else if (appointmentsMade == 2) {
-                model.addAttribute("nextAppointmentTime", usersAppointments.get(1).getTimeSlot());
-            }
-
-            return "vaccinationAppointments/AppoitmentAlreadyBooked";
+            model.addAttribute("nextAppointmentTime",
+                (appointmentsMade == 1)
+                ? usersAppointments.get(0).getTimeSlot()
+                : usersAppointments.get(1).getTimeSlot());
+        } else {
+            // If the user hasn't an appointment already
+            model.addAttribute("appointmentNeeded", true);
+            model.addAttribute("slots", availableSlots);
         }
 
         // if user has 0 appointments or vaccines they can choose a slot from below
@@ -92,7 +90,13 @@ public class VaccinationAppointmentController {
         // Should lead the user to the page to choose relevant slots
         // Prepopulating available slots
 
+        return "vaccinationAppointments/VaccineSelection";
+    }
 
+    @PostMapping("/save-appointment")
+    public String save(@RequestParam Map<String,String> allParams) {
+
+        // Save the data
 
         return "vaccinationAppointments/VaccineSelection";
     }
@@ -204,15 +208,4 @@ public class VaccinationAppointmentController {
         }
         return dates;
     }
-
-    // To do: A method for assigning a user a secondary time slot
-    /*
-     *
-     *
-     * When a user selects a slot we will assign them the same slot 21 days from
-     * then
-     *
-     *
-     *
-     */
 }
