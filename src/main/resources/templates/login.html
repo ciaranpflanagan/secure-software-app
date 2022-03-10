@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Spring Security Example </title>
-    </head>
-    <body>
-        <div th:if="${param.error}">
-            Invalid username and password.
+<div th:insert="layout/header" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3">
+                <div class="card-body">
+                    <h1 class="card-title">Vaccine Login</h1>
+                    
+                    <!-- Login Form -->
+                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                        Invalid email and password.
+                    </div>
+                    <div th:if="${param.logout}" class="alert alert-primary" role="alert">
+                        You have been logged out.
+                    </div>
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Email:</label>
+                            <input type="text" name="username" class="form-control"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="text" name="password" class="form-control"/>
+                        </div>
+                        <div class="mt-3">
+                            <input type="submit" value="Sign In" class="btn btn-primary form-control" />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
-        <form th:action="@{/login}" method="post">
-            <div><label> User Name : <input type="text" name="username"/> </label></div>
-            <div><label> Password: <input type="password" name="password"/> </label></div>
-            <div><input type="submit" value="Sign In"/></div>
-        </form>
-    </body>
-</html>
+    </div>
+<div th:insert="layout/footer"></div>

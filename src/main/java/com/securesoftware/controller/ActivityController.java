@@ -1,6 +1,7 @@
 package com.securesoftware.controller;
 
 import com.securesoftware.exception.UserNotFoundException;
+import com.securesoftware.model.Activity;
 import com.securesoftware.model.User;
 import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
@@ -15,11 +16,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @RequestMapping(path = "/activities")
@@ -29,25 +34,25 @@ public class ActivityController {
     ActivityRepository ActivityRepository;
 
     @Autowired
-    static UserRepository userRepository;
+    UserRepository userRepository;
 
     @RequestMapping(value = "/recent-activity", method = RequestMethod.GET)
-    public String getRecentActivity(Model model, Authentication authentication, HttpServletRequest request){
-        String userId = (String) authentication.getCredentials();
-        long temp = 4;
-        User user = userRepository.getById(temp);
-        return null;
+    public String getRecentActivity(Model model){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+        
+        // Getting active user
+        User user = userRepository.findByEmail(email);
+        Set<Activity> activitiesOfUser = user.getActivities();
+        List<Activity> activitiesList = new ArrayList<>(activitiesOfUser);
+        // Getting the last activity of the user
+        Activity latestActivity = activitiesList.get(activitiesList.size() - 1);
+
+        model.addAttribute("userId", latestActivity.getId());
+        model.addAttribute("latestActivity", latestActivity.getActivityType());
+
+
+        return "activities/recent_activity";
     }
 
-    public static void main(String[] args) {
-
-        //Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //String email = "brianbyrne@gmail.com";
-        //String userId = (String) authentication.getCredentials();
-        long temp = 4;
-        //User user = userRepository.getById(temp);
-
-        System.out.println(temp);
-    }
-    
 }

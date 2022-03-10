@@ -17,17 +17,21 @@ public class Activity {
     @NotBlank
     private String activityType;
 
+    @NotBlank
+    private String date;
+
 
     public Activity() {
         super();
     }
 
 
-    public Activity(Long id, User user, VaccinationAppointment vaccinationAppointment, String activityType) {
+    public Activity(Long id, User user, String activityType, String date) {
         super();
         this.id = id;
         this.user = user;
         this.activityType = activityType;
+        this.date = date;
     }
 
 
@@ -54,5 +58,15 @@ public class Activity {
     public void setActivityType(String activityType) {
         this.activityType = activityType;
     }
+
+
+    public String getDate() {
+        return this.date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
 
 }
