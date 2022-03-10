@@ -19,6 +19,8 @@ import java.util.Map;
 @RequestMapping(path = "/vaccinationappointments")
 public class VaccinationAppointmentController {
 
+    private ArrayList<VaccinationSlot> allSlots = new ArrayList<VaccinationSlot>();
+
     private ArrayList<VaccinationSlot> availableSlots = new ArrayList<VaccinationSlot>();
 
     @Autowired
@@ -27,7 +29,20 @@ public class VaccinationAppointmentController {
     @GetMapping("/select-appointment")
     public String register() {
 
-        availableSlots = setSlots();
+        // Prepopulating available slots
+        allSlots = setSlots();
+
+        // Below removes slots which are already taken
+        ArrayList<VaccinationSlot> takenSlots = new ArrayList<>();
+
+        List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
+
+        for(VaccinationAppointment existingAppointment : existingAppointments){
+            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(), existingAppointment.getVaccinationCentre()));
+        }
+
+        allSlots.removeAll(takenSlots);
+
         return "vaccinationAppointments/VaccineSelection";
     }
 
@@ -129,8 +144,8 @@ public class VaccinationAppointmentController {
     // Returns a current list of dates from today to 30 days from now
     public static String[] dateCalculator() {
         String currentDate = java.time.LocalDate.now().toString();
-        String[] dates = new String[31];
-        for (int i = 0; i < 31; i++) {
+        String[] dates = new String[30];
+        for (int i = 1; i < 31; i++) {
             dates[i] = java.time.LocalDate
                     .parse(currentDate)
                     .plusDays(i)
