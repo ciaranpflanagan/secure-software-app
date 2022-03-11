@@ -31,13 +31,13 @@ public class UserController {
 		return new UserService(UserRepository, RoleRepository, bCryptPasswordEncoder); // I don't think this is correct
 	}
 
-    @RequestMapping("/list")
-    public String viewHomePage(Model model) {
-        List<User> listBooks = UserRepository.findAll();
-        model.addAttribute("listBooks", listBooks);
+    // @RequestMapping("/list")
+    // public String viewHomePage(Model model) {
+    //     List<User> listBooks = UserRepository.findAll();
+    //     model.addAttribute("listBooks", listBooks);
         
-        return "hello";
-    }
+    //     return "hello";
+    // }
 
     @GetMapping("/register")
     public String register() {

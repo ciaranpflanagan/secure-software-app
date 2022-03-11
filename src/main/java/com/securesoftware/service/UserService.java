@@ -1,6 +1,10 @@
 package com.securesoftware.service;
 
 import com.securesoftware.model.User;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
 import com.securesoftware.model.Role;
 import com.securesoftware.repository.RoleRepository;
 import com.securesoftware.repository.UserRepository;
@@ -28,8 +32,9 @@ public class UserService {
 
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        // Role userRole = roleRepository.findByRole("ADMIN");
-        // user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        Role userRole = roleRepository.findByRole("USER");
+        user.setRole(new HashSet<Role>(Arrays.asList(userRole)));
+
         return userRepository.save(user);
     }
 }
