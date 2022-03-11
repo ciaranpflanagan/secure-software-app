@@ -7,7 +7,6 @@ public class VaccinationSlot {
     *  We can use this to generate the available slots
     *  and we can identify occupied slots by taking away those in the VaccinationAppointment table.
     */
-    private int id;
 
     private String brandType;
 
@@ -18,8 +17,7 @@ public class VaccinationSlot {
 
 
 
-    public VaccinationSlot(int id, String brandType, String timeSlot, String vaccinationCentre) {
-        this.id = id;
+    public VaccinationSlot( String brandType, String timeSlot, String vaccinationCentre) {
         this.brandType = brandType;
         this.timeSlot = timeSlot;
         this.vaccinationCentre = vaccinationCentre;
@@ -49,13 +47,7 @@ public class VaccinationSlot {
         this.vaccinationCentre = vaccinationCentre;
     }
 
-    public int getId() {
-        return this.id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
 
     
