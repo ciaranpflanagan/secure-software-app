@@ -1,6 +1,5 @@
 package com.securesoftware.model;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -39,6 +38,14 @@ public class User {
         inverseJoinColumns = @JoinColumn(
           name = "role_id", referencedColumnName = "id")) 
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<VaccinationAppointment> vaccinationAppointments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+    cascade = CascadeType.ALL)
+    private Set<Activity> activities;
 
     public User() {
         super();
@@ -109,6 +116,12 @@ public class User {
     public Set<Role> getRole() {
         return roles;
     }
+    public Set<VaccinationAppointment> getVaccinationAppointments() {
+        return this.vaccinationAppointments;
+    }
+    public Set<Activity> getActivities() {
+        return this.activities;
+    }
 
     /**
      *********************
@@ -148,4 +161,11 @@ public class User {
     public void setRole(Set<Role> roles) {
         this.roles = roles;
     }
+    public void setVaccinationAppointments(Set<VaccinationAppointment> vaccinationAppointments) {
+        this.vaccinationAppointments = vaccinationAppointments;
+    }
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
 }
