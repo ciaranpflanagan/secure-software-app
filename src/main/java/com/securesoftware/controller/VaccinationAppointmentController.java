@@ -41,8 +41,6 @@ public class VaccinationAppointmentController {
 
         List<VaccinationAppointment> existingAppointments = vaccinationAppointmentRepository.findAll();
 
-        int counter = 0;
-
         for (VaccinationAppointment existingAppointment : existingAppointments) {
             takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(),
                     existingAppointment.getVaccinationCentre()));
@@ -55,7 +53,6 @@ public class VaccinationAppointmentController {
         // Checking if a user has not already registered
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
-
 
         // If user already has an appointment
         User user = userRepository.findByEmail(email);
@@ -76,7 +73,8 @@ public class VaccinationAppointmentController {
             model.addAttribute("appointmentNeeded", false);
 
             // return date of most recent appointment
-            model.addAttribute("nextAppointment", (appointmentsMade == 1) ? usersAppointments.get(0) : usersAppointments.get(1));
+            model.addAttribute("nextAppointment",
+                    (appointmentsMade == 1) ? usersAppointments.get(0) : usersAppointments.get(1));
         } else {
             // If the user hasn't an appointment already
             model.addAttribute("appointmentNeeded", true);
@@ -84,8 +82,6 @@ public class VaccinationAppointmentController {
         }
 
         // if user has 0 appointments or vaccines they can choose a slot from below
-        // model.addAttribute("openSlots",
-        // availableSlots);??????????????????????????????
         // Should lead the user to the page to choose relevant slots
         // Prepopulating available slots
 
@@ -93,10 +89,56 @@ public class VaccinationAppointmentController {
     }
 
     @PostMapping("/save-appointment")
-    public String save(@RequestParam Map<String,String> allParams) {
+    public String save(@RequestParam Map<String, String> allParams, Model model) {
 
         // Save the data
-        System.out.println(allParams.get("appointment"));
+        String chosenSlot = allParams.get("appointment");
+
+        // chosenSlot in format "Pfizer/12:00 2022-03-11/City West"
+        String[] arrOfStr = chosenSlot.split("/");
+
+        String brandType = arrOfStr[0];
+        String timeSlot = arrOfStr[1];
+        String vaccinationCentre = arrOfStr[2];
+
+        // Getting user details
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+        User user = userRepository.findByEmail(email);
+
+        VaccinationAppointment newAppointment = new VaccinationAppointment();
+        newAppointment.setUser(user);
+        newAppointment.setTimeSlot(timeSlot);
+        newAppointment.setBrandType(brandType);
+        newAppointment.setDoseNumber(1);
+        newAppointment.setVaccinationCentre(vaccinationCentre);
+
+        vaccinationAppointmentRepository.save(newAppointment);
+        model.addAttribute("appointment", newAppointment);
+        // Will we need some frontend magic here?
+        return "vaccinationAppointments/VaccineSelection";
+    }
+
+    @PostMapping("/remove-appointment")
+    public String remove(@RequestParam Map<String, String> allParams) {
+
+        // Save the data
+        String doseNumberAString = allParams.get("does_number");
+        int doseNumber = Integer.parseInt(doseNumberAString);
+
+        // Getting user details
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+        User user = userRepository.findByEmail(email);
+
+        // Removes the cancelled appointment from the DB
+        List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
+
+        for (VaccinationAppointment appointment : allAppointments) {
+            if (appointment.getUser() == user && appointment.getDoseNumber() == doseNumber) {
+                vaccinationAppointmentRepository.deleteById(appointment.getId());
+            }
+        }
 
         return "vaccinationAppointments/VaccineSelection";
     }
@@ -191,7 +233,7 @@ public class VaccinationAppointmentController {
         for (int i = 0; i < 31; i++) {
             dates[i] = java.time.LocalDate
                     .parse(currentDate)
-                    .plusDays(i)
+                    .plusDays(i + 1)
                     .toString();
         }
         return dates;

@@ -20,9 +20,16 @@
                     <h1 class="card-title">Vaccine Appointment Scheduled</h1>
 
                     <b>Time Slot:</b>&nbsp;<span th:text="${nextAppointment.timeSlot}"></span><br>
-                    <b>Does Number:</b>&nbsp;<span th:text="${nextAppointment.doseNumber}"></span><br>
+                    <b>Dose Number:</b>&nbsp;<span th:text="${nextAppointment.doseNumber}"></span><br>
                     <b>Vaccination Centre:</b>&nbsp;<span th:text="${nextAppointment.vaccinationCentre}"></span><br>
                     <b>Brand Type:</b>&nbsp;<span th:text="${nextAppointment.brandType}"></span><br>
+
+                    <div class="mt-2">
+                        <form th:action="@{/vaccinationappointments/remove-appointment}" method="POST">
+                            <input type="hidden" th:value="${nextAppointment.doseNumber}" name="does_number">
+                            <input type="submit" class="btn btn-danger" value="Cancel Appointment">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
