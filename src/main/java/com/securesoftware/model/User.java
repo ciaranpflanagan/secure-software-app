@@ -30,8 +30,13 @@ public class User {
     @NotBlank
     private String password;
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany 
+    @JoinTable( 
+        name = "user_role", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "role_id", referencedColumnName = "id")) 
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
