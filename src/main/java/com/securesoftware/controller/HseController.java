@@ -22,10 +22,10 @@ import java.util.Map;
 @RequestMapping(path = "/hse-admin")
 public class HseController {
     /*
-        admins should be able to:
-         * View all appointments
-         * Mark appointment as administered 
-    */
+     * admins should be able to:
+     * View all appointments
+     * Mark appointment as administered
+     */
 
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
@@ -38,7 +38,7 @@ public class HseController {
 
     @GetMapping("/all-appointments")
     public String viewAppointments(Model model) {
-        //Add preventative measures for non-admins
+        // Add preventative measures for non-admins
         /*
         ****************************************************
         */
@@ -99,7 +99,7 @@ public class HseController {
                 "Blanchardstown Hospital"
         };
         model.addAttribute("centres", centres);
-        
+
         String[] brands = {
                 "Pfizer",
                 "Moderna"
@@ -113,32 +113,61 @@ public class HseController {
     }
 
     @PostMapping("/edit-appointment")
-    public String editAppointments(@RequestParam Map<String, String> allParams, Model model){
-        String idAsString = "0"; // Note this will be a parameter
+    public String editAppointments(@RequestParam Map<String, String> allParams, Model model) {
+        String idAsString = allParams.get("appointment_id");
         int id = Integer.parseInt(idAsString);
 
         List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
         VaccinationAppointment appointmentToEdit = allAppointments.get(id);
 
         // Here we will edit the appointment using parameters and the setter
-        System.out.println(allParams);
+        Long longId = Long.valueOf(id);
+        appointmentToEdit.setId(longId);
+        appointmentToEdit.setBrandType(allParams.get("brand"));
+        appointmentToEdit.setDoseNumber(Integer.parseInt(allParams.get("dose_number")));
+        appointmentToEdit.setTimeSlot(allParams.get("time_slot"));
+        appointmentToEdit.setVaccinationCentre(allParams.get("centre"));
 
+        // deleting the current appointment value
+        vaccinationAppointmentRepository.deleteById(longId);
+
+        // Adding the updated version
+        vaccinationAppointmentRepository.save(appointmentToEdit);
 
         // Updating the vaccination activity table
         Activity updatedActivity = new Activity();
-        updatedActivity.setDate(appointmentToEdit.getTimeSlot());
+        updatedActivity.setDate(java.time.LocalDate.now().toString());
         updatedActivity.setUser(appointmentToEdit.getUser());
-        updatedActivity.setActivityType("Vaccine Administered");
+        updatedActivity.setActivityType("Appointment edited");
         activityRepository.save(updatedActivity);
 
+        model.addAttribute("editedAppointment", appointmentToEdit);
         return "hse/appointments";
     }
 
     @PostMapping("/administer")
-    public String administer(@RequestParam Map<String, String> allParams) {
+    public String administer(@RequestParam Map<String, String> allParams, Model model) {
         // Update vaccine as administered & schedule new appointment
-        System.out.println(allParams);
+        String idAsString = allParams.get("appointment_id");
+        int id = Integer.parseInt(idAsString);
 
+        List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
+        VaccinationAppointment appointmentAdministered = allAppointments.get(id);
+
+        int doseNumber = appointmentAdministered.getDoseNumber();
+
+        // Increase current dose number by 1
+        appointmentAdministered.setDoseNumber(doseNumber++);
+
+        Long longId = Long.valueOf(id);
+        appointmentAdministered.setId(longId);
+        // deleting the current appointment value
+        vaccinationAppointmentRepository.deleteById(longId);
+
+        // Adding the updated version
+        vaccinationAppointmentRepository.save(appointmentAdministered);
+
+        model.addAttribute("administeredVaccine", appointmentAdministered);
         return "redirect:/hse-admin/all-appointments";
     }
 
