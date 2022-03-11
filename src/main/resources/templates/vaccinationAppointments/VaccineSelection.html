@@ -1,16 +1,22 @@
-<h1>Please select a vaccination apppointment</h1>
-    <jsp:useBean id="availableSlots" type="java.util.ArrayList" scope="session" />
-    <table border="1">
-        <tr>
-            <td>Time Slot</td>
-            <td>Vaccination Center</td>
-            <td>Brand Type</td>
-        </tr>
-        <% for(int i = 0; i < allAppointments.size(); i+=1) { %>
-            <tr>      
-                <td><%=allAppointments.get(i).getTimeSlot()%></td>
-                <td><%=allAppointments.get(i).getVaccinationCentre()%></td>
-                <td><%=allAppointments.get(i).getBrandType()%></td>
-            </tr>
-        <% } %>
-    </table>
+<div th:insert="layout/header" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3 mt-2">
+                <div th:if="${appointmentNeeded}" class="card-body">
+                    <h1 class="card-title">Vaccine Selection</h1>
+                    
+                    <select name="appointment" id="">
+                        <option th:each="slot : ${slots}" th:value="|${slot.brandType}/${slot.timeSlot}/${slot.vaccinationCentre}|">
+                            <span th:text="${slot.brandType}"></span> -
+                            <span th:text="${slot.timeSlot}"></span> -
+                            <span th:text="${slot.vaccinationCentre}"></span>
+                        </option>
+                    </select>
+                </div>
+                <div th:unless="${appointmentNeeded}" class="">
+                    You already have an appointment
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="layout/footer"></div>
