@@ -121,7 +121,7 @@ public class HseController {
         VaccinationAppointment appointmentToEdit = allAppointments.get(id);
 
         // Here we will edit the appointment using parameters and the setter
-
+        System.out.println(allParams);
 
 
         // Updating the vaccination activity table
@@ -132,6 +132,14 @@ public class HseController {
         activityRepository.save(updatedActivity);
 
         return "hse/appointments";
+    }
+
+    @PostMapping("/administer")
+    public String administer(@RequestParam Map<String, String> allParams) {
+        // Update vaccine as administered & schedule new appointment
+        System.out.println(allParams);
+
+        return "redirect:/hse-admin/all-appointments";
     }
 
 }
