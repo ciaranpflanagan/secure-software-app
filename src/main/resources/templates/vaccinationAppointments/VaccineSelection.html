@@ -5,13 +5,16 @@
                 <div th:if="${appointmentNeeded}" class="card-body">
                     <h1 class="card-title">Vaccine Selection</h1>
                     
-                    <select name="appointment" id="">
-                        <option th:each="slot : ${slots}" th:value="|${slot.brandType}/${slot.timeSlot}/${slot.vaccinationCentre}|">
-                            <span th:text="${slot.brandType}"></span> -
-                            <span th:text="${slot.timeSlot}"></span> -
-                            <span th:text="${slot.vaccinationCentre}"></span>
-                        </option>
-                    </select>
+                    <form action="/vaccinationappointments/save-appointment" method="POST">
+                        <select name="appointment" id="" class="form-control">
+                            <option th:each="slot : ${slots}" th:value="|${slot.brandType}/${slot.timeSlot}/${slot.vaccinationCentre}|">
+                                <span th:text="${slot.brandType}"></span> -
+                                <span th:text="${slot.timeSlot}"></span> -
+                                <span th:text="${slot.vaccinationCentre}"></span>
+                            </option>
+                        </select>
+                        <input type="submit" value="Choose Appointment" class="btn btn-primary form-control mt-2">
+                    </form>
                 </div>
                 <div th:unless="${appointmentNeeded}" class="">
                     You already have an appointment
