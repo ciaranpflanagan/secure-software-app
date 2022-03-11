@@ -60,12 +60,13 @@ public class HseController {
 
 
 
+        // Updating the vaccination activity table
         Activity updatedActivity = new Activity();
         updatedActivity.setDate(appointmentToEdit.getTimeSlot());
         updatedActivity.setUser(appointmentToEdit.getUser());
         updatedActivity.setActivityType("Vaccine Administered");
         activityRepository.save(updatedActivity);
-        
+
         return "hse/appointments";
     }
 
