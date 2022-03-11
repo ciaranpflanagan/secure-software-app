@@ -25,6 +25,7 @@ public class StatsController {
     /**
      * Displays the forum
      */
+<<<<<<< HEAD
 
     /*
      * Any user should be able to visualize aggregated statistics about the
@@ -39,6 +40,9 @@ public class StatsController {
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
     @GetMapping("/")
+=======
+    @GetMapping("/all")
+>>>>>>> ed24875bccc4e9298723f52c7320af1871f45ed7
     public String showForum(Model model) {
         // Age demographics
         // Nationality demographics
