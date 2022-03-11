@@ -44,7 +44,7 @@ public class VaccinationAppointmentController {
         int counter = 0;
 
         for (VaccinationAppointment existingAppointment : existingAppointments) {
-            takenSlots.add(new VaccinationSlot(counter++, existingAppointment.getBrandType(), existingAppointment.getTimeSlot(),
+            takenSlots.add(new VaccinationSlot(existingAppointment.getBrandType(), existingAppointment.getTimeSlot(),
                     existingAppointment.getVaccinationCentre()));
         }
 
@@ -139,18 +139,7 @@ public class VaccinationAppointmentController {
                 "16:15",
                 "16:30",
                 "16:45",
-                "17:00",
-                "17:15",
-                "17:30",
-                "17:45",
-                "18:00",
-                "18:15",
-                "18:30",
-                "18:45",
-                "19:00",
-                "19:15",
-                "19:30",
-                "19:45"
+                "17:00"
         };
 
         String[] dates = dateCalculator();
@@ -158,7 +147,6 @@ public class VaccinationAppointmentController {
         String[] vaccinationCentres = {
                 "City West",
                 "Aviva Stadium",
-                "Dalkey Boat Club",
                 "Lusk Tennis Club",
                 "Walkinstown",
                 "Mater Private",
@@ -185,12 +173,12 @@ public class VaccinationAppointmentController {
         for (int i = 0; i < vaccinationCentres.length; i++) {
             if (i % 2 == 0) {
                 for (String time : formattedTimes)
-                    allSlots.add(new VaccinationSlot(i, vaxBrands[0], time, vaccinationCentres[i]));
+                    allSlots.add(new VaccinationSlot(vaxBrands[0], time, vaccinationCentres[i]));
             }
 
             if (i % 2 == 1) {
                 for (String time : formattedTimes)
-                    allSlots.add(new VaccinationSlot(i, vaxBrands[1], time, vaccinationCentres[i]));
+                    allSlots.add(new VaccinationSlot(vaxBrands[1], time, vaccinationCentres[i]));
             }
         }
 
