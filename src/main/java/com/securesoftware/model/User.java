@@ -1,5 +1,6 @@
 package com.securesoftware.model;
 
+import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -29,8 +30,14 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+
+    @ManyToMany 
+    @JoinTable( 
+        name = "user_role", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "role_id", referencedColumnName = "id")) 
     private Set<Role> roles;
 
     public User() {
@@ -102,7 +109,6 @@ public class User {
     public Set<Role> getRole() {
         return roles;
     }
-
 
     /**
      *********************
