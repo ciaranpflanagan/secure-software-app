@@ -199,7 +199,7 @@ public class VaccinationAppointmentController {
     // Returns a current list of dates from today to 30 days from now
     public static String[] dateCalculator() {
         String currentDate = java.time.LocalDate.now().toString();
-        String[] dates = new String[30];
+        String[] dates = new String[31];
         for (int i = 1; i < 31; i++) {
             dates[i] = java.time.LocalDate
                     .parse(currentDate)
