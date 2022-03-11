@@ -54,6 +54,20 @@ public class ForumController {
     }
 
     /**
+     * Displays the page used to show the post answer
+     */
+    @GetMapping("/answer/{id}")
+    public String showAnswerPage(Model model, @PathVariable(value = "id") Long postId, @RequestParam Map<String,String> allParams) {
+        ForumPost question = forumRepository.findById(postId).get();
+        model.addAttribute("question", question);
+        
+        ForumPost answer = forumRepository.findByParentId(postId);
+        model.addAttribute("answer", answer);
+
+        return "forum/answer";
+    }
+
+    /**
      * Displays the page used to post a new forum post
      */
     @GetMapping("/new")

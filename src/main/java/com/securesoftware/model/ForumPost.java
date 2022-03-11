@@ -5,8 +5,6 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.data.annotation.CreatedDate;
-
 @Entity
 @Table(name = "forum_posts")
 public class ForumPost {
@@ -15,7 +13,8 @@ public class ForumPost {
     private Long id;
     private Long user_id;
     
-    private Long parent_id; // Parent post id
+    @Column(name = "parent_id")
+    private Long parentId; // Parent post id
 
     @NotBlank
     private String title;
@@ -28,11 +27,11 @@ public class ForumPost {
         super();
     }
 
-    public ForumPost(Long id, Long user_id, Long parent_id, String title, String body, Date posted_at) {
+    public ForumPost(Long id, Long user_id, Long parentId, String title, String body, Date posted_at) {
         super();
         this.id = id;
         this.user_id = user_id;
-        this.parent_id = parent_id;
+        this.parentId = parentId;
         this.title = title;
         this.body = body;
         this.posted_at = posted_at;
@@ -50,7 +49,7 @@ public class ForumPost {
         return user_id;
     }
     public Long getParentId() {
-        return parent_id;
+        return parentId;
     }
     public String getTitle() {
         return title;
@@ -74,8 +73,8 @@ public class ForumPost {
     public void setUserId(Long user_id) {
         this.user_id = user_id;
     }
-    public void setParentId(Long parent_id) {
-        this.parent_id = parent_id;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
     public void setTitle(String title) {
         this.title = title;
