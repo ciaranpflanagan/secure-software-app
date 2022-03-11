@@ -27,3 +27,6 @@ Once you have the roles created you can assign your account as a HSE admin by up
 ```SQL
 INSERT INTO user_role (user_id, role_id) VALUES ($user_id, 2);
 ```
+
+### Contribution by the "Truncation Nation"
+Both [Brian](https://github.com/brianbyrne99) and [Ciaran](https://github.com/ciaranpflanagan) contributed to 50% of the project each, which is reflected in our [commit analytics](https://github.com/ciaranpflanagan/secure-software-app/pulse).
