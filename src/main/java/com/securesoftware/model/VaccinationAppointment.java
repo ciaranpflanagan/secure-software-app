@@ -3,6 +3,7 @@ package com.securesoftware.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+
 @Entity
 @Table(name = "vaccinationappointments")
 public class VaccinationAppointment {
@@ -15,7 +16,7 @@ public class VaccinationAppointment {
     private User user;
     @NotBlank
     private String timeSlot;
-    @NotBlank
+
     private Integer doseNumber;
     @NotBlank
     private String vaccinationCentre;
