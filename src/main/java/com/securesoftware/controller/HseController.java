@@ -4,7 +4,8 @@ import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
 import com.securesoftware.repository.UserRepository;
 import com.securesoftware.repository.VaccinationAppointmentRepository;
-
+import com.securesoftware.repository.ActivityRepository;
+import com.securesoftware.model.Activity;
 import com.securesoftware.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,9 @@ public class HseController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ActivityRepository activityRepository;
+
     @GetMapping("/all-appointments")
     public String viewAppointments(Model model) {
         //Add preventative measures for non-admins
@@ -41,6 +45,27 @@ public class HseController {
         List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
         model.addAttribute("allAppointments", allAppointments);
 
+        return "hse/appointments";
+    }
+
+    @PostMapping("/edit-appointments")
+    public String editAppointments(@RequestParam Map<String, String> allParams, Model model){
+        String idAsString = "0"; // Note this will be a parameter
+        int id = Integer.parseInt(idAsString);
+
+        List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
+        VaccinationAppointment appointmentToEdit = allAppointments.get(id);
+
+        // Here we will edit the appointment using parameters and the setter
+
+
+
+        Activity updatedActivity = new Activity();
+        updatedActivity.setDate(appointmentToEdit.getTimeSlot());
+        updatedActivity.setUser(appointmentToEdit.getUser());
+        updatedActivity.setActivityType("Vaccine Administered");
+        activityRepository.save(updatedActivity);
+        
         return "hse/appointments";
     }
 
