@@ -154,21 +154,56 @@ public class HseController {
         List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
         VaccinationAppointment appointmentAdministered = allAppointments.get(id);
 
+        // Increase current dose number by 1
         int doseNumber = appointmentAdministered.getDoseNumber();
 
-        // Increase current dose number by 1
-        appointmentAdministered.setDoseNumber(doseNumber++);
+        // automatically identifying a slot 3 weeks in the future if first dose
+        if (doseNumber == 1) {
+            VaccinationAppointment secondAppointment = new VaccinationAppointment();
+            secondAppointment.setUser(appointmentAdministered.getUser());
+            secondAppointment.setBrandType(appointmentAdministered.getBrandType());
+            secondAppointment.setVaccinationCentre(appointmentAdministered.getVaccinationCentre());
+            secondAppointment.setDoseNumber(doseNumber++);
+            // calling method to calculate date of 3 weeks time (same slot)
+            secondAppointment.setTimeSlot(threeWeeks(appointmentAdministered.getTimeSlot()));
+            ;
 
-        Long longId = Long.valueOf(id);
-        appointmentAdministered.setId(longId);
-        // deleting the current appointment value
-        vaccinationAppointmentRepository.deleteById(longId);
+            // adding 2nd appointment to DB
+            vaccinationAppointmentRepository.save(secondAppointment);
 
-        // Adding the updated version
-        vaccinationAppointmentRepository.save(appointmentAdministered);
+            // Updating the vaccination activity table
+            Activity updatedActivity = new Activity();
+            updatedActivity.setDate(java.time.LocalDate.now().toString());
+            updatedActivity.setUser(secondAppointment.getUser());
+            updatedActivity.setActivityType("2nd appointment scheduled");
+            activityRepository.save(updatedActivity);
+        }
 
-        model.addAttribute("administeredVaccine", appointmentAdministered);
+        Activity updatedActivity = new Activity();
+        updatedActivity.setDate(java.time.LocalDate.now().toString());
+        updatedActivity.setUser(appointmentAdministered.getUser());
+        updatedActivity.setActivityType(doseNumber+"Vaccine administered");
+        activityRepository.save(updatedActivity);
+
+
+        model.addAttribute("vaxGiven", updatedActivity);
         return "redirect:/hse-admin/all-appointments";
+    }
+
+    // This method returns the given timestamp +21 days in the future
+    public static String threeWeeks(String currentDate) {
+        // going to be in this format
+        // 12:00 2022-03-11
+        String[] timeElements = currentDate.split(" ");
+
+        String date = timeElements[1];
+
+        String secondDoseDate = java.time.LocalDate
+                .parse(date)
+                .plusDays(21)
+                .toString();
+        String timeSlot = timeElements[0] + " " + secondDoseDate;
+        return timeSlot;
     }
 
 }
