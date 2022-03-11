@@ -101,6 +101,15 @@ public class VaccinationAppointmentController {
         return "vaccinationAppointments/VaccineSelection";
     }
 
+    @PostMapping("/remove-appointment")
+    public String remove(@RequestParam Map<String,String> allParams) {
+
+        // Save the data
+        System.out.println(allParams.get("does_number"));
+
+        return "vaccinationAppointments/VaccineSelection";
+    }
+
     public static ArrayList<VaccinationSlot> setSlots() {
         ArrayList<VaccinationSlot> allSlots = new ArrayList<VaccinationSlot>();
 
