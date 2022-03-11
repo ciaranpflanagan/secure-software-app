@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-    <head>
-        <title>Hello World!</title>
-    </head>
-    <body>
-        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
-    </body>
-</html>
+<div th:insert="layout/header" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3 mt-2">
+                <div class="card-body">
+                    <h1 class="card-title">HSE Vaccine Portal</h1>
+                    
+                    <a th:href="@{/login}"><button class="btn btn-primary">Login</button></a>
+                    <a th:href="@{/users/register}"><button class="btn btn-primary">Register</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="layout/footer"></div>
