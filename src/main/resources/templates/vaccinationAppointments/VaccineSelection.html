@@ -1,0 +1,37 @@
+<div th:insert="layout/header" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3 mt-2">
+                <div th:if="${appointmentNeeded}" class="card-body">
+                    <h1 class="card-title">Vaccine Selection</h1>
+                    
+                    <form th:action="@{/vaccinationappointments/save-appointment}" method="POST">
+                        <select name="appointment" id="" class="form-control">
+                            <option th:each="slot : ${slots}" th:value="|${slot.brandType}/${slot.timeSlot}/${slot.vaccinationCentre}|">
+                                <span th:text="${slot.brandType}"></span> -
+                                <span th:text="${slot.timeSlot}"></span> -
+                                <span th:text="${slot.vaccinationCentre}"></span>
+                            </option>
+                        </select>
+                        <input type="submit" value="Choose Appointment" class="btn btn-primary form-control mt-2">
+                    </form>
+                </div>
+                <div th:unless="${appointmentNeeded}" class="card-body">
+                    <h1 class="card-title">Vaccine Appointment Scheduled</h1>
+
+                    <b>Time Slot:</b>&nbsp;<span th:text="${nextAppointment.timeSlot}"></span><br>
+                    <b>Dose Number:</b>&nbsp;<span th:text="${nextAppointment.doseNumber}"></span><br>
+                    <b>Vaccination Centre:</b>&nbsp;<span th:text="${nextAppointment.vaccinationCentre}"></span><br>
+                    <b>Brand Type:</b>&nbsp;<span th:text="${nextAppointment.brandType}"></span><br>
+
+                    <div class="mt-2">
+                        <form th:action="@{/vaccinationappointments/remove-appointment}" method="POST">
+                            <input type="hidden" th:value="${nextAppointment.doseNumber}" name="does_number">
+                            <input type="submit" class="btn btn-danger" value="Cancel Appointment">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="layout/footer"></div>

@@ -1,0 +1,14 @@
+<div th:insert="layout/header" /></div>
+    <div class="container mt-2">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3">
+                <div class="card-body">
+                    <h1 class="card-title">Latest Account Activity</h1>
+                    <hr>
+                    <h3 th:text="${activity.activityType}"></h3>
+                    <p th:text="${activity.date}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="layout/footer"></div>
