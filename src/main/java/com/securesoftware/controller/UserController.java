@@ -1,6 +1,8 @@
 package com.securesoftware.controller;
 
+import com.securesoftware.model.Activity;
 import com.securesoftware.model.User;
+import com.securesoftware.repository.ActivityRepository;
 import com.securesoftware.repository.RoleRepository;
 import com.securesoftware.repository.UserRepository;
 import com.securesoftware.service.UserService;
@@ -26,17 +28,20 @@ public class UserController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    ActivityRepository activityRepository;
+
     @Bean
-	public UserService userService() {
-		return new UserService(UserRepository, RoleRepository, bCryptPasswordEncoder); // I don't think this is correct
-	}
+    public UserService userService() {
+        return new UserService(UserRepository, RoleRepository, bCryptPasswordEncoder); // I don't think this is correct
+    }
 
     // @RequestMapping("/list")
     // public String viewHomePage(Model model) {
-    //     List<User> listBooks = UserRepository.findAll();
-    //     model.addAttribute("listBooks", listBooks);
-        
-    //     return "hello";
+    // List<User> listBooks = UserRepository.findAll();
+    // model.addAttribute("listBooks", listBooks);
+
+    // return "hello";
     // }
 
     @GetMapping("/register")
@@ -45,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@RequestParam Map<String,String> allParams) {
+    public String saveUser(@RequestParam Map<String, String> allParams) {
         User userExists = userService().findUserByEmail(allParams.get("email"));
         if (userExists != null) {
             System.out.println("User already exists");
@@ -65,6 +70,13 @@ public class UserController {
 
             // Save user
             userService().saveUser(user);
+
+            // Updating the vaccination activity table
+            Activity updatedActivity = new Activity();
+            updatedActivity.setDate(java.time.LocalDate.now().toString());
+            updatedActivity.setUser(user);
+            updatedActivity.setActivityType("Account Created");
+            activityRepository.save(updatedActivity);
             System.out.println("Saved user");
         }
 

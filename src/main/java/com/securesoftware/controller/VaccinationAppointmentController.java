@@ -4,6 +4,8 @@ import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.model.VaccinationSlot;
 import com.securesoftware.repository.UserRepository;
 import com.securesoftware.repository.VaccinationAppointmentRepository;
+import com.securesoftware.repository.ActivityRepository;
+import com.securesoftware.model.Activity;
 
 import com.securesoftware.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class VaccinationAppointmentController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ActivityRepository activityRepository;
 
     @GetMapping("/select-appointment")
     public String register(Model model) {
@@ -115,6 +120,13 @@ public class VaccinationAppointmentController {
 
         vaccinationAppointmentRepository.save(newAppointment);
         model.addAttribute("appointment", newAppointment);
+
+        // Updating the vaccination activity table
+        Activity updatedActivity = new Activity();
+        updatedActivity.setDate(newAppointment.getTimeSlot());
+        updatedActivity.setUser(newAppointment.getUser());
+        updatedActivity.setActivityType("Vaccine apppointment made");
+        activityRepository.save(updatedActivity);
         // Will we need some frontend magic here?
         return "vaccinationAppointments/VaccineSelection";
     }
@@ -137,6 +149,13 @@ public class VaccinationAppointmentController {
         for (VaccinationAppointment appointment : allAppointments) {
             if (appointment.getUser() == user && appointment.getDoseNumber() == doseNumber) {
                 vaccinationAppointmentRepository.deleteById(appointment.getId());
+                
+                // Updating the vaccination activity table
+                Activity updatedActivity = new Activity();
+                updatedActivity.setDate(appointment.getTimeSlot());
+                updatedActivity.setUser(appointment.getUser());
+                updatedActivity.setActivityType("Vaccination appointment cancelled");
+                activityRepository.save(updatedActivity);
             }
         }
 
