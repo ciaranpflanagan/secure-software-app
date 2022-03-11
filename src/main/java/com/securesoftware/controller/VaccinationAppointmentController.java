@@ -76,10 +76,7 @@ public class VaccinationAppointmentController {
             model.addAttribute("appointmentNeeded", false);
 
             // return date of most recent appointment
-            model.addAttribute("nextAppointmentTime",
-                (appointmentsMade == 1)
-                ? usersAppointments.get(0).getTimeSlot()
-                : usersAppointments.get(1).getTimeSlot());
+            model.addAttribute("nextAppointment", (appointmentsMade == 1) ? usersAppointments.get(0) : usersAppointments.get(1));
         } else {
             // If the user hasn't an appointment already
             model.addAttribute("appointmentNeeded", true);
@@ -99,6 +96,7 @@ public class VaccinationAppointmentController {
     public String save(@RequestParam Map<String,String> allParams) {
 
         // Save the data
+        System.out.println(allParams.get("appointment"));
 
         return "vaccinationAppointments/VaccineSelection";
     }
