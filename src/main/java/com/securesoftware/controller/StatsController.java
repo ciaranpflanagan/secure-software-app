@@ -13,7 +13,7 @@ public class StatsController {
     /**
      * Displays the forum
      */
-    @GetMapping("/")
+    @GetMapping("/all")
     public String showForum(Model model) {
         // List<Appoin> posts = forumRepository.findAll();
         // model.addAttribute("posts", posts);
