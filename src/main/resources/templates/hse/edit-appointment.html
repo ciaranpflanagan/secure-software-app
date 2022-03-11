@@ -5,7 +5,7 @@
                 <div class="card-body">
                     <h1 class="card-title">Edit Appointment</h1>
                     
-                    <!-- Register Form -->
+                    <!-- Edit Appointment Form -->
                     <form th:action="@{/hse-admin/edit-appointment}" method="post">
                         <div class="mb-3">
                             <label for="time_slot" class="form-label">Time Slot:</label>
@@ -14,7 +14,6 @@
                                     <span th:text="${time}"></span>
                                 </option>
                             </select>
-                            <!-- <input type="text" name="time_slot" class="form-control"/> -->
                         </div>
                         <div class="mb-3">
                             <label for="dose_number" class="form-label">Dose Number:</label>
@@ -27,7 +26,6 @@
                                     <span th:text="${centre}"></span>
                                 </option>
                             </select>
-                            <!-- <input type="text" name="centre" class="form-control" /> -->
                         </div>
                         <div class="mb-3">
                             <label for="brand" class="form-label">Vaccine Brand:</label>
@@ -36,7 +34,6 @@
                                     <span th:text="${brand}"></span>
                                 </option>
                             </select>
-                            <!-- <input type="text" name="brand" class="form-control" /> -->
                         </div>
                         <div class="mt-3">
                             <input type="hidden" th:value="${appointment.id}" name="appointment_id">

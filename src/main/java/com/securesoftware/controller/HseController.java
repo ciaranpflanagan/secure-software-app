@@ -38,10 +38,6 @@ public class HseController {
 
     @GetMapping("/all-appointments")
     public String viewAppointments(Model model) {
-        // Add preventative measures for non-admins
-        /*
-        ****************************************************
-        */
         List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
         model.addAttribute("allAppointments", allAppointments);
 
@@ -198,11 +194,9 @@ public class HseController {
 
         String date = timeElements[1];
 
-        String secondDoseDate = java.time.LocalDate
-                .parse(date)
-                .plusDays(21)
-                .toString();
+        String secondDoseDate = java.time.LocalDate.parse(date).plusDays(21).toString();
         String timeSlot = timeElements[0] + " " + secondDoseDate;
+        
         return timeSlot;
     }
 
