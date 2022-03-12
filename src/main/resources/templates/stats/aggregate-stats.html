@@ -1,0 +1,38 @@
+<div th:insert="layout/header" /></div>
+    <div class="container">
+        <div class="row">
+            <div class="card col-md-6 offset-md-3 mt-2">
+                <div class="card-body">
+                    <h1 class="card-title mb-4">Aggregate Stats</h1>
+                    
+                    <!-- Year Frequency -->
+                    <div class="row mt-2">
+                        <h4>Year Frequency</h4>
+                        <div th:each="freq : ${yearFreqMap}" class="row" style="display: inline;">
+                            <span th:text="${freq.key}" style="font-weight: 700;"></span>
+                            <span th:text="${freq.value}"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Nationality Frequency -->
+                    <div class="row mt-2">
+                        <h4>Nationality Frequency</h4>
+                        <div th:each="freq : ${nationalityFreqMap}" class="row" style="display: inline;">
+                            <span th:text="${freq.key}" style="font-weight: 700;"></span>
+                            <span th:text="${freq.value}"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Vaccine Brand Frequency -->
+                    <div class="row">
+                        <h4>Vaccine Brand Frequency</h4>
+                        <div th:each="freq : ${brandFreqMap}" class="row" style="display: inline;">
+                            <span th:text="${freq.key}" style="font-weight: 700;"></span>
+                            <span th:text="${freq.value}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="layout/footer"></div>
