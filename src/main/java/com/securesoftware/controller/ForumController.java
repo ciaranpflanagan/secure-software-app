@@ -3,7 +3,6 @@ package com.securesoftware.controller;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import com.securesoftware.model.ForumPost;
 import com.securesoftware.model.User;
@@ -11,7 +10,6 @@ import com.securesoftware.repository.ForumRepository;
 import com.securesoftware.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
