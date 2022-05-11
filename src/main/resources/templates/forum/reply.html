@@ -16,16 +16,17 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <form action="#" th:action="@{/forum/save-reply}" method="POST">
+                        <form action="#" th:action="@{/forum/save-reply}" method="POST" id="replyForm">
                             <label for="title" class="form-label">Reply Title</label>
-                            <input name="title" type="text" placeholder="Post Title" class="form-control"><br>
+                            <input name="title" type="text" placeholder="Post Title" class="form-control" required><br>
                             <label for="body" class="form-label">Reply</label>
                             <textarea
                                 name="body"
                                 cols="30"
                                 rows="10"
                                 placeholder="Forum Post Reply..."
-                                class="form-control"></textarea>
+                                class="form-control"
+                                required></textarea>
                             <br>
                             <input type="hidden" th:value="${post.id}" name="post">
                             <input type="submit" class="btn btn-primary" value="Submit Reply">
@@ -36,4 +37,18 @@
             </div>
         </div>
     </div>
+    <script>
+        $("#replyForm").validate({
+            rules: {
+                title: {
+                    required: true,
+                    minlength: 3
+                },
+                body: {
+                    required: true,
+                    minlength: 15
+                }
+            }
+        });
+    </script>
 <div th:insert="layout/footer"></div>
