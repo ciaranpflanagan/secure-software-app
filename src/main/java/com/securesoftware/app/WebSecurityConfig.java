@@ -38,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.permitAll();
+
+		http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
 	}
 
     @Override
