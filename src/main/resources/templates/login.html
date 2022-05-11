@@ -12,6 +12,7 @@
                     <div th:if="${param.logout}" class="alert alert-primary" role="alert">
                         You have been logged out.
                     </div>
+                    <meta http-equiv="Content-Security-Policy" content="form-action 'self';">
                     <form th:action="@{/login}" method="post" id="loginForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Email:</label>
