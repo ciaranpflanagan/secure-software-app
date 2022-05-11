@@ -8,9 +8,9 @@
 2. Run `mvn clean install` to install the required packages
 3. Configure database connection inside of `src/main/resources/application.properties`.
 4. Start the application by running `mvn spring-boot:run`.
-5. Visit the application at [localhost:8080](http://localhost:8080/).
+5. Visit the application at [localhost:8443](https://localhost:8443/login).
 
-You can login to the application via [localhost:8080/login](http://localhost:8080/login).
+You can login to the application via [localhost:8443/login](https://localhost:8443/login).
    
 ## Database Setup
 You can register as a normal user in the application via [localhost:8080/users/register](http://localhost:8080/users/register). However to set an account as a HSE admin (this is needed to access certain HSE admin only features), you must manually alter the database.
