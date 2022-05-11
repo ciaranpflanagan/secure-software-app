@@ -6,42 +6,42 @@
                     <h1 class="card-title">Vaccine Register</h1>
                     
                     <!-- Register Form -->
-                    <form th:action="@{/users/save}" method="post">
+                    <form th:action="@{/users/save}" method="post" id="registerForm">
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First Name:</label>
-                            <input type="text" name="first_name" class="form-control"/>
+                            <input type="text" name="first_name" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last Name:</label>
-                            <input type="text" name="last_name" class="form-control" />
+                            <input type="text" name="last_name" class="form-control" required />
                         </div>
                         <div class="mb-3">
-                            <label for="dob" class="form-label">DOB ((dd/mm/yyyy)):</label>
-                            <input type="text" name="dob" class="form-control" placeholder="(dd/mm/yyyy)" />
+                            <label for="dob" class="form-label">DOB (DD/MM/YYYY):</label>
+                            <input type="text" name="dob" class="form-control" placeholder="DD/MM/YYYY" required />
                         </div>
                         <div class="mb-3">
                             <label for="pps" class="form-label">PPSN:</label>
-                            <input type="text" name="pps" class="form-control" />
+                            <input type="text" name="pps" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address:</label>
-                            <input type="text" name="address" class="form-control" />
+                            <input type="text" name="address" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Phone Number:</label>
-                            <input type="text" name="phone_number" class="form-control" />
+                            <input type="text" name="phone_number" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="text" name="email" class="form-control" />
+                            <input type="text" name="email" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="nationality" class="form-label">Nationality:</label>
-                            <input type="text" name="nationality" class="form-control" />
+                            <input type="text" name="nationality" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" name="password" class="form-control" />
+                            <input type="password" name="password" class="form-control" required />
                         </div>
                         <div class="mt-3">
                             <input type="submit" value="Register" class="btn btn-primary form-control" />
@@ -51,4 +51,66 @@
             </div>
         </div>
     </div>
+    <script>
+        // Custom DOB regex rule
+        $.validator.addMethod(
+            "regexDOB",
+            function(value, element, regexp) {
+                var check = false;
+                return this.optional(element) || regexp.test(value);
+            },
+            "DOB must be in the form DD/MM/YYYY and must be a valid DOB"
+        );
+        // Custom password regex rule
+        $.validator.addMethod(
+            "regexPassword",
+            function(value, element, regexp) {
+                var check = false;
+                return this.optional(element) || regexp.test(value);
+            },
+            "Passwords must contain at least 8 characters, one letter and one number"
+        );
+
+        $("#registerForm").validate({
+            rules: {
+                first_name: {
+                    required: true,
+                    minlength: 3
+                },
+                last_name: {
+                    required: true,
+                    minlength: 3
+                },
+                dob: {
+                    required: true,
+                    regexDOB: /^(0[1-9]|[12][0-9]|3[01])[- \/.](0[1-9]|1[012])[- \/.](19|20)\d\d$/
+                },
+                pps: {
+                    required: true,
+                    minlength: 8
+                },
+                address: {
+                    required: true,
+                    minlength: 3
+                },
+                phone_number: {
+                    required: true,
+                    minlength: 10
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                nationality: {
+                    required: true,
+                    minlength: 3
+                },
+                password: {
+                    required: true,
+                    minlength: 8,
+                    regexPassword: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+                }
+            }
+        });
+    </script>
 <div th:insert="layout/footer"></div>
