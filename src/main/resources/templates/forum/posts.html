@@ -16,7 +16,11 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <a th:href="@{/forum/reply/{id}(id=${post.id})}">Reply</a>
+                            <a
+                                th:if="${#authorization.expression('hasAuthority(''HSE'')')}"
+                                th:href="@{/forum/reply/{id}(id=${post.id})}">
+                                Reply
+                            </a>
                             <a th:href="@{/forum/answer/{id}(id=${post.id})}">View Answer</a>
                         </div>
                     </div>
