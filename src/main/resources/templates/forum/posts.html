@@ -3,20 +3,22 @@
         <div class="row">
             <div class="col-lg-12 mb-3">
 
-                <div th:each="post : ${posts}" class="card py-3 px-3 mb-3">
-                    <div class="row align-items-center">
-                        <div class="col-md-8 mb-3 mb-sm-0">
-                            <h5 th:text="${post.title}"></h5>
-                            <!-- <p class="text-sm">
-                                <span class="op-6">Posted:</span>
-                                <span th:text="${post.posted_at}"></span>
-                            </p> -->
-                            <div th:text="${post.body}" class="text-sm op-5"></div>
+                <div th:each="post : ${posts}">
+                    <div th:if="${post.parentId == null}" class="card py-3 px-3 mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-8 mb-3 mb-sm-0">
+                                <h5 th:text="${post.title}"></h5>
+                                <!-- <p class="text-sm">
+                                    <span class="op-6">Posted:</span>
+                                    <span th:text="${post.posted_at}"></span>
+                                </p> -->
+                                <div th:text="${post.body}" class="text-sm op-5"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-2">
-                        <a th:href="@{/forum/reply/{id}(id=${post.id})}">Reply</a>
-                        <a th:href="@{/forum/answer/{id}(id=${post.id})}">View Answer</a>
+                        <div class="row mt-2">
+                            <a th:href="@{/forum/reply/{id}(id=${post.id})}">Reply</a>
+                            <a th:href="@{/forum/answer/{id}(id=${post.id})}">View Answer</a>
+                        </div>
                     </div>
                 </div>
 
