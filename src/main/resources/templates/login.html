@@ -12,14 +12,14 @@
                     <div th:if="${param.logout}" class="alert alert-primary" role="alert">
                         You have been logged out.
                     </div>
-                    <form th:action="@{/login}" method="post">
+                    <form th:action="@{/login}" method="post" id="loginForm">
                         <div class="mb-3">
                             <label for="username" class="form-label">Email:</label>
-                            <input type="text" name="username" class="form-control"/>
+                            <input type="text" name="username" class="form-control" required />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" name="password" class="form-control"/>
+                            <input type="password" name="password" class="form-control" required />
                         </div>
                         <div class="mt-3">
                             <input type="submit" value="Sign In" class="btn btn-primary form-control" />
@@ -29,4 +29,29 @@
             </div>
         </div>
     </div>
+    <script>
+        // Custom password regex rule
+        $.validator.addMethod(
+            "regexPassword",
+            function(value, element, regexp) {
+                var check = false;
+                return this.optional(element) || regexp.test(value);
+            },
+            "Passwords must contain at least 8 characters, one letter and one number"
+        );
+
+        $("#loginForm").validate({
+            rules: {
+                username: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 8,
+                    regexPassword: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+                }
+            }
+        });
+    </script>
 <div th:insert="layout/footer"></div>
