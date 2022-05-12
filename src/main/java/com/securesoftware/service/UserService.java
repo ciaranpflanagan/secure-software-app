@@ -12,6 +12,7 @@ import com.securesoftware.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.securesoftware.app.AES;
 
 @Service
 public class UserService {
@@ -33,9 +34,11 @@ public class UserService {
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         // Encrypting other important information in the DB
-        user.setPPSNumber(bCryptPasswordEncoder.encode(user.getPPSNumber()));
-        user.setPhoneNumber(bCryptPasswordEncoder.encode(user.getPhoneNumber()));
-        user.setDOB(bCryptPasswordEncoder.encode(user.getDOB()));
+        final String sk = "eochair";
+        user.setPPSNumber(AES.encrypt(user.getPPSNumber(), sk));
+        user.setPhoneNumber(AES.encrypt(user.getPhoneNumber(), sk));
+        user.setDOB(AES.encrypt(user.getDOB(), sk));
+
         Role userRole = roleRepository.findByRole("USER");
         user.setRole(new HashSet<Role>(Arrays.asList(userRole)));
 
