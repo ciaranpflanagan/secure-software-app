@@ -13,7 +13,7 @@
 You can login to the application via [localhost:8443/login](https://localhost:8443/login).
    
 ## Database Setup
-You can register as a normal user in the application via [localhost:8080/users/register](http://localhost:8080/users/register). However to set an account as a HSE admin (this is needed to access certain HSE admin only features), you must manually alter the database.
+You can register as a normal user in the application via [localhost:8443/users/register](https://localhost:8443/users/register). However to set an account as a HSE admin (this is needed to access certain HSE admin only features), you must manually alter the database.
 ### Setting Up Roles
 Two roles need to be created in the database. Run the following commands to create the `USERS` and `HSE` roles.
 ```SQL
