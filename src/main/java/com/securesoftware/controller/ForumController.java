@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.apache.log4j.BasicConfigurator;  
+import org.apache.log4j.LogManager;  
+import org.apache.log4j.Logger; 
+
 @Controller
 @RequestMapping(path = "/forum")
 public class ForumController {
@@ -28,11 +32,15 @@ public class ForumController {
     @Autowired
     ForumRepository forumRepository;
 
+
+    private static final Logger logger = LogManager.getLogger(ForumController.class);
     /**
      * Displays the forum
      */
     @GetMapping("/posts")
     public String showForum(Model model) {
+        BasicConfigurator.configure();
+        logger.info("forums page has been viewed");
         List<ForumPost> posts = forumRepository.findAll();
         model.addAttribute("posts", posts);
 
@@ -45,6 +53,8 @@ public class ForumController {
     @GetMapping("/reply/{id}")
     public String showReplyPage(Model model, @PathVariable(value = "id") Long postId, @RequestParam Map<String,String> allParams) {
         // Get single forum post and return it to view
+        BasicConfigurator.configure();
+        logger.info("A reply has been made to a forum");
         ForumPost post = forumRepository.findById(postId).get();
         model.addAttribute("post", post);
 
@@ -56,6 +66,8 @@ public class ForumController {
      */
     @GetMapping("/answer/{id}")
     public String showAnswerPage(Model model, @PathVariable(value = "id") Long postId, @RequestParam Map<String,String> allParams) {
+        BasicConfigurator.configure();
+        logger.info("An answer has been made to a forum");
         ForumPost question = forumRepository.findById(postId).get();
         model.addAttribute("question", question);
         
@@ -80,6 +92,8 @@ public class ForumController {
      */
     @PostMapping("/save")
     public String saveForumPost(@RequestParam Map<String,String> allParams) {
+        BasicConfigurator.configure();
+        logger.info("A new forum has been created");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails)principal).getUsername();
 

@@ -18,6 +18,10 @@ import com.securesoftware.repository.VaccinationAppointmentRepository;
 import com.securesoftware.app.AES;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.apache.log4j.BasicConfigurator;  
+import org.apache.log4j.LogManager;  
+import org.apache.log4j.Logger; 
+
 
 @Controller
 @RequestMapping(path = "/stats")
@@ -38,12 +42,16 @@ public class StatsController {
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
+    private static final Logger logger = LogManager.getLogger(StatsController.class);
+
     @GetMapping("/all")
     public String showForum(Model model) {
         // Age demographics
         // Nationality demographics
         // Vaccination brands used
         // ###################################################################################
+        BasicConfigurator.configure();
+        logger.info("The statistics page has been viewed");
         List<User> allUsers = userRepository.findAll();
         final String sk = "eochair";
 

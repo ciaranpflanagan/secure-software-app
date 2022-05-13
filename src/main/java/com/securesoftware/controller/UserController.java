@@ -14,6 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.apache.log4j.BasicConfigurator; 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +34,8 @@ public class UserController {
 
     @Autowired
     ActivityRepository activityRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Bean
     public UserService userService() {
@@ -51,9 +57,11 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@RequestParam Map<String, String> allParams) {
+        BasicConfigurator.configure();  
+        logger.info("User attempting to register"); 
         User userExists = userService().findUserByEmail(allParams.get("email"));
         if (userExists != null) {
-            System.out.println("User already exists");
+            logger.info("User already exists");
             // Error - need to handle this
         } else {
             // Create user
@@ -77,7 +85,8 @@ public class UserController {
             updatedActivity.setUser(user);
             updatedActivity.setActivityType("Account Created");
             activityRepository.save(updatedActivity);
-            System.out.println("Saved user");
+            BasicConfigurator.configure();  
+            logger.info("User Successfully created");
         }
 
         return "login";
