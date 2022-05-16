@@ -14,12 +14,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import org.apache.log4j.BasicConfigurator; 
+import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+import java.text.ParseException;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -36,6 +42,10 @@ public class UserController {
     ActivityRepository activityRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("d/M/yyyy");
+
+    private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
     @Bean
     public UserService userService() {
@@ -57,13 +67,19 @@ public class UserController {
 
     @PostMapping("/save")
     public String saveUser(@RequestParam Map<String, String> allParams) {
-        BasicConfigurator.configure();  
-        logger.info("User attempting to register"); 
+        BasicConfigurator.configure();
+        logger.info("User attempting to register");
         User userExists = userService().findUserByEmail(allParams.get("email"));
         if (userExists != null) {
             logger.info("User already exists");
-            // Error - need to handle this
-        } else {
+            return "users/register";
+
+        } else if (!ageVerifier(allParams.get("dob"))) {
+            logger.info("Incorrect Birthday data");
+            return "users/register";
+        }
+
+        else {
             // Create user
             User user = new User();
             user.setFirstName(allParams.get("first_name"));
@@ -85,10 +101,58 @@ public class UserController {
             updatedActivity.setUser(user);
             updatedActivity.setActivityType("Account Created");
             activityRepository.save(updatedActivity);
-            BasicConfigurator.configure();  
+            BasicConfigurator.configure();
             logger.info("User Successfully created");
+            return "login";
+        }
+    }
+
+    public static boolean ageVerifier(String dob) {
+        // checking structural integrity of dob
+        boolean formatValidity = false;
+        boolean ageChecker = false;
+
+        try {
+            // why 2008-02-2x, 20-11-02, 12012-04-05 are valid date?
+            sdf.parse(dob);
+            // strict mode - check 30 or 31 days, leap year
+            sdf.setLenient(false);
+            formatValidity = true;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            logger.info("Incorrect Birthday format");
+            formatValidity = false;
         }
 
-        return "login";
+        if (formatValidity) {
+            // getting todays date 18 years ago
+            String currentDate = java.time.LocalDate.now().toString();
+            String cutOffDate = java.time.LocalDate
+                    .parse(currentDate)
+                    .minusYears(18)
+                    .toString();
+
+            // appropriatley formatting
+            String dobFormatted = dob.substring(6, 10) + "-" + dob.substring(3, 5) + "-" + dob.substring(0, 2);
+            System.out.println("Bootsy " + cutOffDate + "  " + dobFormatted);
+
+            try {
+                Date date1 = sdf2.parse(dobFormatted);
+                Date date2 = sdf2.parse(cutOffDate);
+
+                System.out.println("Bootsy " + date1);
+
+                if (date1.before(date2))
+                    ageChecker = true;
+                else
+                    logger.info("User under 18");
+            } catch (Exception e) {
+
+            }
+        }
+
+        return ageChecker;
     }
+
 }
