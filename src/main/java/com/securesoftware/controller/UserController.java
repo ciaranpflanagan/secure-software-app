@@ -135,7 +135,6 @@ public class UserController {
 
             // appropriatley formatting
             String dobFormatted = dob.substring(6, 10) + "-" + dob.substring(3, 5) + "-" + dob.substring(0, 2);
-            System.out.println("Bootsy " + cutOffDate + "  " + dobFormatted);
 
             try {
                 Date date1 = sdf2.parse(dobFormatted);
