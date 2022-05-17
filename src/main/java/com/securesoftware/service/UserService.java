@@ -19,6 +19,7 @@ public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    public static final int MAX_ATTEMPTS = 3;
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -43,5 +44,24 @@ public class UserService {
         user.setRole(new HashSet<Role>(Arrays.asList(userRole)));
 
         return userRepository.save(user);
+    }
+
+    /**
+     * Increases the number of failed attempts on an account
+     * @param user
+     */
+    public void increaseFailedAttempts(User user) {
+        int newFailAttempts = user.getAttempts() + 1;
+        userRepository.updateFailedAttempts(newFailAttempts, user.getEmail());
+    }
+
+    public void resetFailedAttempts(User user, String email) {
+        user.setAccountLocked(false);
+        userRepository.updateFailedAttempts(0, email);
+    }
+     
+    public void lock(User user) {
+        user.setAccountLocked(true);
+        userRepository.save(user);
     }
 }
