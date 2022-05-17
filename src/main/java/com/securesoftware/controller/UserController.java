@@ -26,6 +26,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 import java.text.ParseException;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping(path = "/users")
@@ -77,9 +78,19 @@ public class UserController {
         } else if (!ageVerifier(allParams.get("dob"))) {
             logger.info("Incorrect Birthday data");
             return "users/register";
-        }
-
-        else {
+        } else if (!passwordValidator(allParams.get("password"))) {
+            logger.info("Incorrect Password format");
+            return "users/register";
+        } else if (!ppsValidator(allParams.get("pps"))) {
+            logger.info("Incorrect PPSN format");
+            return "users/register";
+        } else if (!phoneValidator(allParams.get("phone_number"))) {
+            logger.info("Incorrect Phone Number format");
+            return "users/register";
+        } else if (!emailValidator(allParams.get("email"))) {
+            logger.info("Incorrect Email format");
+            return "users/register";
+        } else {
             // Create user
             User user = new User();
             user.setFirstName(allParams.get("first_name"));
@@ -152,6 +163,56 @@ public class UserController {
         }
 
         return ageChecker;
+    }
+
+    public static boolean passwordValidator(String password) {
+        boolean isValid = false;
+        boolean isLengthValid = false;
+        boolean[] checks = new boolean[2];
+
+        if (password.length() >= 8)
+            isLengthValid = true;
+
+        if (isLengthValid) {
+            // checking if a number present
+            for (char letter = 'A'; letter <= 'z'; letter++) {
+                if (password.indexOf(letter) != -1)
+                    checks[0] = true;
+            }
+            for (char number = '0'; number <= '9'; number++) {
+                if (password.indexOf(number) != -1)
+                    checks[1] = true;
+            }
+        }
+
+        if (checks[0] == true && checks[1] == true) {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    public static boolean ppsValidator(String ppsn) {
+        boolean isValid = false;
+        if (ppsn.length() >= 8)
+            isValid = true;
+
+        return isValid;
+    }
+
+    public static boolean phoneValidator(String number) {
+        boolean isValid = false;
+
+        if (number.length() >= 10)
+            isValid = true;
+
+        return isValid;
+    }
+
+    public static boolean emailValidator(String email) {
+        String regexPattern = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        return Pattern.compile(regexPattern)
+                .matcher(email)
+                .matches();
     }
 
 }
