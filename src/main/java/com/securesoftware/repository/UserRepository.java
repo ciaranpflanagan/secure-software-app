@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
-    @Query("UPDATE users u SET u.attempts = ?1 WHERE u.email = ?2")
+    @Query(value = "UPDATE users u SET u.attempts = ?1 WHERE u.email = ?2", nativeQuery = true)
     @Modifying
     public void updateFailedAttempts(int failAttempts, String email);
 }
