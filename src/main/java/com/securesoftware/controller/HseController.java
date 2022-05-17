@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;  
+import org.apache.log4j.LogManager;  
+import org.apache.log4j.Logger;  
+
 @Controller
 @RequestMapping(path = "/hse-admin")
 public class HseController {
@@ -36,8 +40,12 @@ public class HseController {
     @Autowired
     ActivityRepository activityRepository;
 
+    private static final Logger logger = LogManager.getLogger(HseController.class);  
+
     @GetMapping("/all-appointments")
     public String viewAppointments(Model model) {
+        BasicConfigurator.configure();
+        logger.info("Admin has viewed all appointments");
         List<VaccinationAppointment> allAppointments = vaccinationAppointmentRepository.findAll();
         model.addAttribute("allAppointments", allAppointments);
 
@@ -46,6 +54,8 @@ public class HseController {
 
     @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable(value = "id") Long appointmentId) {
+        BasicConfigurator.configure();
+        logger.info("Admin has updated an appointment");
         String[] times = {
                 "09:00",
                 "09:15",
@@ -110,6 +120,8 @@ public class HseController {
 
     @PostMapping("/edit-appointment")
     public String editAppointments(@RequestParam Map<String, String> allParams, Model model) {
+        BasicConfigurator.configure();
+        logger.info("Appointment has been edited by Admin");
         String idAsString = allParams.get("appointment_id");
         int id = Integer.parseInt(idAsString);
 
@@ -144,6 +156,8 @@ public class HseController {
     @PostMapping("/administer")
     public String administer(@RequestParam Map<String, String> allParams, Model model) {
         // Update vaccine as administered & schedule new appointment
+        BasicConfigurator.configure();
+        logger.info("Vaccination has been administered");
         String idAsString = allParams.get("appointment_id");
         int id = Integer.parseInt(idAsString);
 
