@@ -91,6 +91,8 @@ public class UserController {
             user.setEmail(allParams.get("email"));
             user.setNationality(allParams.get("nationality"));
             user.setPassword(allParams.get("password"));
+            user.setAttempts(0);
+            user.setAccountLocked(false);
 
             // Save user
             userService().saveUser(user);

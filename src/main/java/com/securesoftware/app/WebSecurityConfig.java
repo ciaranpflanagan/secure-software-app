@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -26,11 +28,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Autowired
+	/*@Autowired
     private CustomLoginFailureHandler loginFailureHandler;
      
     @Autowired
-    private CustomLoginSuccessHandler loginSuccessHandler;
+    private CustomLoginSuccessHandler loginSuccessHandler;*/
+	@Bean
+	public SimpleUrlAuthenticationFailureHandler loginFailureHandler(){
+		return new CustomLoginFailureHandler();
+	}
+
+	@Bean
+	public SimpleUrlAuthenticationSuccessHandler loginSuccessHandler(){
+		return new CustomLoginSuccessHandler();
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -43,8 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 				.loginPage("/login")
 				.defaultSuccessUrl("/home", true)
-				.failureHandler(loginFailureHandler)
-                .successHandler(loginSuccessHandler)
+				.failureHandler(loginFailureHandler())
 				.permitAll()
 				.and()
 			.logout()

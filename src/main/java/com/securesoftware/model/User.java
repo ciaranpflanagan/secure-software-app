@@ -66,7 +66,9 @@ public class User {
         String email,
         String nationality,
         String password,
-        Set<Role> roles
+        Set<Role> roles,
+        boolean accountLocked,
+        int attempts
     ) {
         super();
         this.id = id;
@@ -80,6 +82,8 @@ public class User {
         this.nationality = nationality;
         this.password = password; // This will need to be hashed
         this.roles = roles;
+        this.accountLocked=accountLocked;
+        this.attempts=attempts;
     }
 
     /**
@@ -183,5 +187,6 @@ public class User {
     public void setActivities(Set<Activity> activities) {
         this.activities = activities;
     }
+
 
 }
