@@ -1,3 +1,5 @@
+SET foreign_key_checks = 0;
+
 DELETE FROM `spring`.`activity`;
 DELETE FROM `spring`.`forum_posts`;
 DELETE  FROM `spring`.`vaccinationappointments`;
@@ -37,3 +39,5 @@ INSERT INTO `spring`.`users` (`id`,`address`, `dob`, `nationality`, `first_name`
 
 INSERT INTO `spring`.`vaccinationappointments` (`id`, `brand_type`, `dose_number`, `time_slot`, `user_id`, `vaccination_centre`) VALUES ('1', 'Moderna', '1', '09:45 2022-05-14', '261', 'City West');
 INSERT INTO `spring`.`vaccinationappointments` (`id`, `brand_type`, `dose_number`, `time_slot`, `user_id`, `vaccination_centre`) VALUES ('2', 'Pfizer', '2', '09:45 2022-05-21', '261', 'Blanchardstown Hospital');
+
+SET foreign_key_checks = 1;

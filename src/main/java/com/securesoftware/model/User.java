@@ -29,6 +29,10 @@ public class User {
     private String nationality;
     @NotBlank
     private String password;
+    @Column(name = "account_locked")
+    private boolean accountLocked;
+    @Column(name = "attempts")
+    private int attempts;
 
     @ManyToMany 
     @JoinTable( 
@@ -113,6 +117,12 @@ public class User {
     public String getPassword() {
         return password;
     }
+    public boolean getIsAccountLocked() {
+        return accountLocked;
+    }
+    public int getAttempts() {
+        return attempts;
+    }
     public Set<Role> getRole() {
         return roles;
     }
@@ -157,6 +167,12 @@ public class User {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public void setAttempts(Integer num) {
+        this.attempts = num;
+    }
+    public void setAccountLocked(boolean val) {
+        this.accountLocked = val;
     }
     public void setRole(Set<Role> roles) {
         this.roles = roles;
