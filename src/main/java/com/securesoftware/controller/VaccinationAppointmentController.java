@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;  
+import org.apache.log4j.LogManager;  
+import org.apache.log4j.Logger;
+
 @Controller
 @RequestMapping(path = "/vaccinationappointments")
 public class VaccinationAppointmentController {
@@ -35,6 +39,8 @@ public class VaccinationAppointmentController {
 
     @Autowired
     ActivityRepository activityRepository;
+
+    private static final Logger logger = LogManager.getLogger(VaccinationAppointmentController.class);  
 
     @GetMapping("/select-appointment")
     public String register(Model model) {
@@ -95,7 +101,8 @@ public class VaccinationAppointmentController {
 
     @PostMapping("/save-appointment")
     public String save(@RequestParam Map<String, String> allParams, Model model) {
-
+        BasicConfigurator.configure();
+        logger.info("New appointment has been booked");
         // Save the data
         String chosenSlot = allParams.get("appointment");
 
@@ -133,7 +140,8 @@ public class VaccinationAppointmentController {
 
     @PostMapping("/remove-appointment")
     public String remove(@RequestParam Map<String, String> allParams) {
-
+        BasicConfigurator.configure();
+        logger.info("Appointment has been cancelled");
         // Save the data
         String doseNumberAString = allParams.get("does_number");
         int doseNumber = Integer.parseInt(doseNumberAString);

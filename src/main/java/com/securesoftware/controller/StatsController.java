@@ -15,8 +15,12 @@ import com.securesoftware.model.User;
 import com.securesoftware.model.VaccinationAppointment;
 import com.securesoftware.repository.UserRepository;
 import com.securesoftware.repository.VaccinationAppointmentRepository;
-
+import com.securesoftware.app.AES;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.apache.log4j.BasicConfigurator;  
+import org.apache.log4j.LogManager;  
+import org.apache.log4j.Logger; 
 
 
 @Controller
@@ -38,13 +42,18 @@ public class StatsController {
     @Autowired
     VaccinationAppointmentRepository vaccinationAppointmentRepository;
 
+    private static final Logger logger = LogManager.getLogger(StatsController.class);
+
     @GetMapping("/all")
     public String showForum(Model model) {
         // Age demographics
         // Nationality demographics
         // Vaccination brands used
         // ###################################################################################
+        BasicConfigurator.configure();
+        logger.info("The statistics page has been viewed");
         List<User> allUsers = userRepository.findAll();
+        final String sk = "eochair";
 
         ArrayList<String> years = new ArrayList<String>();
 
@@ -52,7 +61,7 @@ public class StatsController {
 
         // getting all years of users
         for (User user : allUsers) {
-            String dob = user.getDOB();
+            String dob = AES.decrypt(user.getDOB(), sk);
             String year = dob.substring(dob.length() - 4);
             years.add(year);
 

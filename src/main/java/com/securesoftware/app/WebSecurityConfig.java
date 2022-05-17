@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.authorizeRequests()
 				.antMatchers("/", "/hello", "/users/register", "/users/save", "/stats/all").permitAll()
-				.antMatchers("/hse-admin/**", "/forum/reply/**", "/forum/save-reply").access("hasRole('HSE')")
+				.antMatchers("/hse-admin/**", "/forum/reply/**", "/forum/save-reply").access("hasAuthority('HSE')")
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
@@ -38,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.permitAll();
+
+		http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
 	}
 
     @Override
